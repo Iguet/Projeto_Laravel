@@ -14,3 +14,23 @@
 Route::get('/', function () {
     return view('welcome');
 });
+
+Auth::routes();
+
+Route::get('/home', 'HomeController@index')->name('home');
+
+Route::group(['prefix' => 'demandas'], function () {
+    
+    Route::get('/', 'DemandasController@index')->name('listaDemandas');
+    Route::get('/cadastrar', 'DemandasController@create')->name('formDemandas');
+    Route::post('/cadastrar/store', 'DemandasController@store')->name('cadastroDemandas');
+
+});
+
+Route::group(['prefix' => 'projetos'], function () {
+    
+    Route::get('/', 'ProjetosController@index')->name('listaProjetos');
+    Route::get('/cadastrar', 'ProjetosController@create')->name('formProjetos');
+    Route::post('/cadastrar/store', 'ProjetosController@store')->name('cadastroProjetos');
+
+});

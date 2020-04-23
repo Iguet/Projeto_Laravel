@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Demandas;
+use App\Projetos;
 use Illuminate\Http\Request;
 
 class DemandasController extends Controller
@@ -14,7 +15,7 @@ class DemandasController extends Controller
      */
     public function index()
     {
-        //
+        return view('demandas\index');
     }
 
     /**
@@ -24,7 +25,13 @@ class DemandasController extends Controller
      */
     public function create()
     {
-        //
+        $projetos = Projetos::all();
+        
+       
+        return view('demandas\cadastro', [
+            'projetos' => $projetos
+        ]);
+
     }
 
     /**
@@ -34,8 +41,15 @@ class DemandasController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request)
-    {
-        //
+    {   
+        // dd($request);
+        $demandas = new Demandas;
+        $demandas->titulo = $request->Titulo;
+        $demandas->descricao = $request->Descricao;
+        $demandas->projeto_id = $request->Projeto;
+        $demandas->save();
+
+        return redirect()->route('listaDemandas');
     }
 
     /**

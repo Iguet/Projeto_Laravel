@@ -17,9 +17,14 @@ class usersProjetos extends Model
         'projetos_id'
     ];
 
-    public function roles()
+    public function users()
     {
-        return $this->belongsToMany('App\Role', 'role_user_table', 'user_id', 'role_id');
+        return $this->hasOne('App\Users');
+    }
+
+    public function projetos()
+    {
+        return $this->hasOne('App\Projetos');
     }
 
 }
