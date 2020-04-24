@@ -14,7 +14,8 @@ class Projetos extends Model
 
     protected $filliable = [
         'id',
-        'nome'
+        'nome',
+        'descricao'
     ];
 
     public function usersProjetos()

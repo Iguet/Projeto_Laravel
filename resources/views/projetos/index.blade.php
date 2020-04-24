@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('content')  
-    <div class="jumbotron">
+    <div class="container">
         <div class="container">
             <table class="table table-striped table-bordered tabela">
                 <thead>
@@ -12,7 +12,15 @@
                         <th>Data de Criação</th>
                     </tr>
                 </thead>
-                <tbody id="tabelaProjeto">
+                <tbody>
+                    @foreach ($projetos as $projetos)
+                        <tr>
+                            <td><input type="checkbox" name="id[]" value=" {{ $projetos->id }} "></td>
+                            <td> {{ $projetos->name }} </td>
+                            <td> {{ $projetos->descricao }} </td>
+                            <td> {{ $projetos->created_at }} </td>
+                        </tr>
+                    @endforeach
                 </tbody>
             </table>
             <form action="{{ route('formProjetos') }}" method="get">

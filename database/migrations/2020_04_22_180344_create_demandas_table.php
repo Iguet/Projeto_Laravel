@@ -16,7 +16,7 @@ class CreateDemandasTable extends Migration
         Schema::create('demandas', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('projeto_id');
-            $table->string('titulo');
+            $table->string('titulo')->unique();
             $table->text('descricao');
             $table->enum('estado', ['nova', 'em progresso', 'parada', 'finalizada']);
             $table->foreign('projeto_id')->references('id')->on('projetos');

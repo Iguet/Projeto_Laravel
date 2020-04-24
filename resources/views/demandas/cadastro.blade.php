@@ -2,9 +2,9 @@
 
 @section('content')  
 <div class="jumbotron">
-    <div class="container" id="Projetos">
+    <div class="container">
       <div class="container cadastro">
-          <form class="form-group cadastroprojeto" action="{{ route('cadastroDemandas') }}" method="POST">
+          <form class="form-group cadastroprojeto" action="{{ route('cadastroDemandas') }}" method="post">
             <h2 class="display-4">Cadastro de Demandas</h2><br>
             @csrf
               <div class="form-group">

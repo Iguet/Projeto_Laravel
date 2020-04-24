@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Demandas;
 use App\Projetos;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class DemandasController extends Controller
 {
@@ -13,9 +14,17 @@ class DemandasController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Demandas $demandas)
     {
-        return view('demandas\index');
+
+        $dados = DB::table('projetos')
+                    ->join('demandas', 'demandas.projeto_id', '=', 'projetos.id')
+                    ->select('projetos.name', 'demandas.id', 'demandas.titulo', 'demandas.descricao', 'demandas.estado', 'demandas.created_at')->get();
+
+        return view('demandas\index', [
+            'dados' => $dados
+        ]);
+
     }
 
     /**
@@ -25,8 +34,8 @@ class DemandasController extends Controller
      */
     public function create()
     {
-        $projetos = Projetos::all();
         
+        $projetos = Projetos::all();
        
         return view('demandas\cadastro', [
             'projetos' => $projetos

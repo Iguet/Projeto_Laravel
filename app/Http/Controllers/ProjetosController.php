@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Projetos;
+use App\User;
+use App\UsersProjetos;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class ProjetosController extends Controller
 {
@@ -15,7 +18,11 @@ class ProjetosController extends Controller
     public function index()
     {
         
-        return view('projetos\index');
+        $projetos = Projetos::all();
+       
+        return view('projetos\index', [
+            'projetos' => $projetos
+        ]);
 
     }
 
@@ -27,7 +34,11 @@ class ProjetosController extends Controller
     public function create()
     {
         
-        return view('projetos\cadastro');
+        $users = User::all();
+        
+        return view('projetos\cadastro', [
+            'users' => $users
+        ]);
 
     }
 
@@ -39,7 +50,30 @@ class ProjetosController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        
+        $projetos = new Projetos();
+        $usersProjetos = new UsersProjetos();
+
+        $projetos->name = $request->nome;
+        $projetos->descricao = $request->descricao;
+        $projetos->save();
+        
+        $idProjeto = DB::table('projetos')->where('name', $request->nome)->value('id');
+
+        if($idProjeto > 0){
+            
+            foreach ($request->id as $id) {
+
+                DB::table('users_projetos')->insert(
+                    [ 'users_id' => $id, 'projetos_id' => $idProjeto, 'created_at' => now(), 'updated_at' => now() ]
+                );
+
+            }
+
+        }
+
+        return redirect()->route('listaProjetos');
+
     }
 
     /**
@@ -50,7 +84,8 @@ class ProjetosController extends Controller
      */
     public function show(Projetos $projetos)
     {
-        //
+
+       
     }
 
     /**
@@ -61,7 +96,8 @@ class ProjetosController extends Controller
      */
     public function edit(Projetos $projetos)
     {
-        //
+        
+        return view('projetos\edita');
     }
 
     /**
@@ -73,7 +109,6 @@ class ProjetosController extends Controller
      */
     public function update(Request $request, Projetos $projetos)
     {
-        //
     }
 
     /**

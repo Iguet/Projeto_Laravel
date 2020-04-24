@@ -12,10 +12,20 @@
                         <th>Titulo</th>
                         <th>Descrição</th>
                         <th>Estado</th>
-                        <th>Data</th>
+                        <th>Data de Criação</th>
                     </tr>
                 </thead>
-                <tbody id="tabela">
+                <tbody>
+                    @foreach ($dados as $demandas)
+                        <tr>
+                            <td> <input type="checkbox" name="id[]" value=" {{ $demandas->id }} "> </td>
+                            <td> {{ $demandas->name}} </td>
+                            <td> {{ $demandas->titulo }} </td>
+                            <td> {{ $demandas->descricao }} </td>
+                            <td> {{ $demandas->estado }} </td>
+                            <td> {{ $demandas->created_at }} </td>
+                        </tr>
+                    @endforeach
                 </tbody>
             </table>
             <form method="get" action="{{ route('formDemandas') }}" >
