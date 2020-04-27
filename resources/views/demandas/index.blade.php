@@ -1,9 +1,9 @@
 @extends('layouts.app')
 
-{{-- @extends('demandas.cadastro') --}}
 @section('content')
     <div class="container">
         <div class="row">
+            <h2>Demandas</h2>
             <table class="table table-striped table-bordered tabela">
                 <thead>
                     <tr>

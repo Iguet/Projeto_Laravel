@@ -60,7 +60,7 @@ class ProjetosController extends Controller
         
         $idProjeto = DB::table('projetos')->where('name', $request->nome)->value('id');
 
-        if($idProjeto > 0){
+        if($idProjeto){
             
             foreach ($request->id as $id) {
 
@@ -94,10 +94,25 @@ class ProjetosController extends Controller
      * @param  \App\Projetos  $projetos
      * @return \Illuminate\Http\Response
      */
-    public function edit(Projetos $projetos)
+    public function edit(Request $request)
     {
         
-        return view('projetos\edita');
+        // dd($request);
+
+        $users = User::all();
+        $usersProjetos = UsersProjetos::all();
+        $projetos = new Projetos;
+        
+
+        $projetos = DB::table('projetos')->where('id', $request->id)->first();
+        
+        // dd($projetos);
+
+        return view('projetos\edita', [
+            'projetos' => $projetos,
+            'users' => $users,
+            'usersProjetos' => $usersProjetos
+        ]);
     }
 
     /**
@@ -109,6 +124,60 @@ class ProjetosController extends Controller
      */
     public function update(Request $request, Projetos $projetos)
     {
+
+        
+        $usersProjetos = new UsersProjetos;
+
+        // DB::table('projetos')->where('id', $request->idProjetos)->update([
+        //     'name' => $request->nome,
+        //     'descricao' => $request->descricao,
+        //     'updated_at' => now()
+        // ]);
+        
+        // $dados = DB::table('projetos')
+        // ->join('demandas', 'demandas.projeto_id', '=', 'projetos.id')
+        // ->select('projetos.name', 'demandas.id', 'demandas.titulo', 'demandas.descricao', 'demandas.estado', 'demandas.created_at')->get();
+
+        // dd($request);
+
+        // $usersProjetos = DB::table('users_projetos')->join('users', function ($join) {
+        //     $join->on('users.id', '=', 'users_projetos.users_id')
+        //          ->where('users_projetos.projetos_id', '=', $request->id);
+        // })->get();
+
+        // $consulta = $request->id;
+
+        foreach ($request->id as $consulta){
+
+            $usersProjetos = DB::select('SELECT id, name, email FROM users AS U INNER JOIN users_projetos AS UP ON U.id = UP.users_id WHERE UP.projetos_id = ?', [$consulta]);
+        }
+        
+
+        // DB::select('select * from users where active = ?', [1])
+
+        dd($usersProjetos);
+
+        // SELECT id_Usuario, nome_Usuario, email FROM usuario AS U INNER JOIN usuario_has_projeto AS UP ON U.id_Usuario = UP.usuario_id_Usuario WHERE UP.projeto_id_Projeto = '{$id}'"
+
+        if($request->id > 0){
+
+            foreach($request->id as $id){
+
+                DB::table('users_projetos')->where('users_id', $usersProjetos->users_id)->delete();
+
+                DB::table('users_projetos')->updateOrInsert([
+                    'users_id' => $id,
+                    'projetos_id' => $request->idProjetos,
+                    'created_at' => now(),
+                    'updated_at' => now()
+                ]);
+
+            }
+
+        }
+
+        return redirect()->route('listaProjetos');
+
     }
 
     /**
