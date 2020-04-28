@@ -6,7 +6,7 @@
             <h2>Projetos</h2>
             <form action=" {{ route('editaProjetos') }} " method="post">
                 @csrf
-                <table class="table table-striped table-bordered tabela">
+                <table class="table table-striped table-bordered" id="tabela">
                     <thead>
                         <tr>
                             <th></th>
@@ -18,7 +18,7 @@
                     <tbody>
                         @foreach ($projetos as $projetos)
                             <tr>
-                                <td><input type="checkbox" name="id[]" value=" {{ $projetos->id }} "></td>
+                                <td><input type="radio" name="id[]" value=" {{ $projetos->id }} "></td>
                                 <td> {{ $projetos->name }} </td>
                                 <td> {{ $projetos->descricao }} </td>
                                 <td> {{ $projetos->created_at }} </td>

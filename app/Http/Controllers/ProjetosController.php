@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Projetos;
 use App\User;
 use App\UsersProjetos;
+use DataTables;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -85,6 +86,7 @@ class ProjetosController extends Controller
     public function show(Projetos $projetos)
     {
 
+        return Datatables::of(Projetos::query())->make(true);
        
     }
 
@@ -96,17 +98,19 @@ class ProjetosController extends Controller
      */
     public function edit(Request $request)
     {
-        
-        // dd($request);
 
-        $users = User::all();
-        $usersProjetos = UsersProjetos::all();
-        $projetos = new Projetos;
-        
+        $users = User::all();    
+
+        $id = implode($request->id);
 
         $projetos = DB::table('projetos')->where('id', $request->id)->first();
-        
-        // dd($projetos);
+
+        $usersProjetos = DB::table('users')
+            ->select('users.id', 'name', 'email')
+            ->join('users_projetos', 'users.id', 'users_projetos.users_id')
+            // ->leftJoin('projetos', 'users_projetos.projetos_id', 'projetos.id')
+            ->where('users_projetos.projetos_id', '=', $request->id)
+            ->get();
 
         return view('projetos\edita', [
             'projetos' => $projetos,
@@ -125,56 +129,52 @@ class ProjetosController extends Controller
     public function update(Request $request, Projetos $projetos)
     {
 
-        
         $usersProjetos = new UsersProjetos;
 
-        // DB::table('projetos')->where('id', $request->idProjetos)->update([
-        //     'name' => $request->nome,
-        //     'descricao' => $request->descricao,
-        //     'updated_at' => now()
-        // ]);
-        
-        // $dados = DB::table('projetos')
-        // ->join('demandas', 'demandas.projeto_id', '=', 'projetos.id')
-        // ->select('projetos.name', 'demandas.id', 'demandas.titulo', 'demandas.descricao', 'demandas.estado', 'demandas.created_at')->get();
+        DB::table('projetos')->where('id', $request->idProjetos)->update([
+            'name' => $request->nome,
+            'descricao' => $request->descricao,
+            'updated_at' => now()
+        ]);
 
-        // dd($request);
+        $consultaProjeto = $request->idProjetos;
 
-        // $usersProjetos = DB::table('users_projetos')->join('users', function ($join) {
-        //     $join->on('users.id', '=', 'users_projetos.users_id')
-        //          ->where('users_projetos.projetos_id', '=', $request->id);
-        // })->get();
+        if($request->id){
 
-        // $consulta = $request->id;
+            $consultaUsersProjetos = DB::table('users')
+            ->select('users.id', 'name', 'email')
+            ->join('users_projetos', 'users.id', 'users_projetos.users_id')
+            // ->leftJoin('projetos', 'users_projetos.projetos_id', 'projetos.id')
+            ->where('users_projetos.projetos_id', '=', $request->id)
+            ->get();
 
-        foreach ($request->id as $consulta){
+            
+            if($consultaUsersProjetos > 0){
 
-            $usersProjetos = DB::select('SELECT id, name, email FROM users AS U INNER JOIN users_projetos AS UP ON U.id = UP.users_id WHERE UP.projetos_id = ?', [$consulta]);
-        }
-        
+                DB::table('users_projetos')->where('projetos_id', '=', $consultaProjeto)->delete();
+                
+                foreach ($request->id as $consulta){
+                    
+                    DB::table('users_projetos')->Insert(
+                        [ 'users_id' => $consulta, 'projetos_id' => $request->idProjetos, 'created_at' => now(), 'updated_at' => now() ]
+                    );
 
-        // DB::select('select * from users where active = ?', [1])
+                }
+                    
+            } else {
 
-        dd($usersProjetos);
+                foreach ($request->id as $consulta){
+                    
+                    DB::table('users_projetos')->Insert(
+                        [ 'users_id' => $consulta, 'projetos_id' => $request->idProjetos, 'created_at' => now(), 'updated_at' => now() ]
+                    );
 
-        // SELECT id_Usuario, nome_Usuario, email FROM usuario AS U INNER JOIN usuario_has_projeto AS UP ON U.id_Usuario = UP.usuario_id_Usuario WHERE UP.projeto_id_Projeto = '{$id}'"
-
-        if($request->id > 0){
-
-            foreach($request->id as $id){
-
-                DB::table('users_projetos')->where('users_id', $usersProjetos->users_id)->delete();
-
-                DB::table('users_projetos')->updateOrInsert([
-                    'users_id' => $id,
-                    'projetos_id' => $request->idProjetos,
-                    'created_at' => now(),
-                    'updated_at' => now()
-                ]);
-
+                }
             }
 
         }
+
+        // dd($consultaUsersProjetos);
 
         return redirect()->route('listaProjetos');
 
