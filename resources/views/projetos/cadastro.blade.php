@@ -11,7 +11,7 @@
                 <div class="form-group">
                     <textarea class="form-control" type="text" name="descricao" placeholder="Descricao"></textarea>
                 </div>
-                <table id="example" class="display table table-striped table-bordered tabela" style="width:100%">
+                <table class="display table table-striped table-bordered tabela" style="width:100%">
                 <thead>
                     <h3> Pessoas </h3>
                     <tr>

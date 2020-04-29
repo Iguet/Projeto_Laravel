@@ -34,6 +34,6 @@ Route::group(['prefix' => 'projetos'], function () {
     Route::post('/cadastrar/store', 'ProjetosController@store')->name('cadastroProjetos');
     Route::post('/editar', 'ProjetosController@edit')->name('editaProjetos');
     Route::post('/editar/update', 'ProjetosController@update')->name('updateProjetos');
-    Route::get('/editar/table', 'ProjetosController@show')->name('ajaxProjetos');
+    // Route::get('/users', 'ProjetosController@show')->name('showUsersProjetos');
 
 });

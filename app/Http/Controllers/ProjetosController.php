@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Projetos;
 use App\User;
 use App\UsersProjetos;
-use DataTables;
+use Yajra\DataTables\Services\DataTable;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -20,11 +20,13 @@ class ProjetosController extends Controller
     {
         
         $projetos = Projetos::all();
-       
+
+        $lista = DB::table('projetos')->select('id', 'name', 'descricao', 'created_at');
+
         return view('projetos\index', [
             'projetos' => $projetos
         ]);
-
+           
     }
 
     /**
@@ -85,9 +87,10 @@ class ProjetosController extends Controller
      */
     public function show(Projetos $projetos)
     {
+        
+        $users = User::all();
 
-        return Datatables::of(Projetos::query())->make(true);
-       
+
     }
 
     /**
@@ -98,25 +101,71 @@ class ProjetosController extends Controller
      */
     public function edit(Request $request)
     {
+        
+        if($request->id){
 
-        $users = User::all();    
 
-        $id = implode($request->id);
 
-        $projetos = DB::table('projetos')->where('id', $request->id)->first();
+            $users = User::all();    
 
-        $usersProjetos = DB::table('users')
-            ->select('users.id', 'name', 'email')
-            ->join('users_projetos', 'users.id', 'users_projetos.users_id')
-            // ->leftJoin('projetos', 'users_projetos.projetos_id', 'projetos.id')
-            ->where('users_projetos.projetos_id', '=', $request->id)
-            ->get();
+            $id = implode($request->id);
 
-        return view('projetos\edita', [
-            'projetos' => $projetos,
-            'users' => $users,
-            'usersProjetos' => $usersProjetos
-        ]);
+            $projetos = DB::table('projetos')->where('id', $request->id)->first();
+
+
+            $usersComProjetoss = DB::table('users')
+                ->select('users.id')
+                ->join('users_projetos', 'users.id', 'users_projetos.users_id')
+                // ->leftJoin('projetos', 'users_projetos.projetos_id', 'projetos.id')
+                ->where('users_projetos.projetos_id', '=', $request->id)
+                ->get();
+
+            // $usersComProjetoss->toArray();
+
+            $usersComProjetos = DB::table('users')
+                ->select('users.id', 'name', 'email')
+                ->join('users_projetos', 'users.id', 'users_projetos.users_id')
+                // ->leftJoin('projetos', 'users_projetos.projetos_id', 'projetos.id')
+                ->where('users_projetos.projetos_id', '=', $request->id);
+                // ->get();
+
+            $usersProjetos = DB::table('users')
+                ->distinct('id')
+                ->select('id', 'name', 'email')
+                ->join('users_projetos', 'users.id', 'users_projetos.users_id')
+                // ->leftJoin('projetos', 'users_projetos.projetos_id', 'projetos.id')
+                ->where('users_projetos.projetos_id', '<>', $request->id)
+                ->union($usersComProjetos)
+                ->get();
+
+            // $final = DB::table('users')
+            //     ->select('id', 'name', 'email')
+            //     ->join('users_projetos', 'users.id', 'users_projetos.users_id')
+            //     ->where('users_projetos.users_id', '<>', $usersComProjetos->id)
+            //     ->get();
+
+                // SELECT DISTINCT id, name, email FROM users AS U JOIN users_projetos AS UP ON U.id = UP.users_id WHERE UP.projetos_id <> 1 AND UP.users_id <> 2 UNION SELECT DISTINCT id, name, email FROM users AS U JOIN users_projetos AS UP ON U.id = UP.users_id WHERE UP.projetos_id = 1
+
+
+                dd($usersComProjetoss->toJson());
+
+            return view('projetos\edita', [
+                'projetos' => $projetos,
+                'users' => $users,
+                // 'usersProjetos' => $usersProjetos,
+                'usersProjetos' => $usersProjetos
+            ]);
+
+        } else {
+
+            echo "
+                <script>
+                    alert('Selecione um projeto para editar');
+                </script>
+            ";
+
+        }
+
     }
 
     /**

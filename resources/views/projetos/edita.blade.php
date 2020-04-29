@@ -12,9 +12,36 @@
                 <div class="form-group">
                     <textarea class="form-control" type="text" name="descricao" id="DescricaoEditaProjeto" placeholder="Descricao">{{ $projetos->descricao }}</textarea>
                 </div>
-                <table class="table table-striped table-bordered" id="tabela">
+                <form >
+                    <table class="table table-striped table-bordered tabela">
+                        <thead>
+                            <h4> Pessoas </h4>
+                            <tr>
+                                <th></th>
+                                <th>ID</th>
+                                <th>Nome</th>
+                                <th>Email</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                                @foreach ($usersProjetos as $user)
+
+                                    <tr>
+                                        <td><input type="checkbox" name="id[]" value=" {{ $user->id }} "></td>
+                                        <td> {{ $user->id }} </td>
+                                        <td> {{ $user->name }} </td>
+                                        <td> {{ $user->email }} </td>
+                                    </tr>
+
+                                @endforeach
+    
+                        </tbody>
+                    </table>
+                    <input class="btn btn-dark" type="submit" value="Adicionar" name="User">
+                </form>
+                <table class="table table-striped table-bordered tabela">
                     <thead>
-                        <h3> Pessoas </h3>
+                        <h4> Pessoas Cadastradas</h4>
                         <tr>
                             <th></th>
                             <th>ID</th>
@@ -34,13 +61,16 @@
                                     <td> {{ $user->email }} </td>
                                 </tr>   
 
-                                @endforeach
+                            @endforeach
 
                         @endif
                     </tbody>
                 </table>
+                    <input class="btn btn-dark" type="submit" value="Adicionar" name="User">
                     <input class="btn btn-inserir btn-default" type="submit" value="Editar" name="Projeto">
             </form>
         </div>
     </div>
+
+
 @endsection
