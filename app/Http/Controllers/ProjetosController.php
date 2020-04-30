@@ -21,7 +21,7 @@ class ProjetosController extends Controller
         
         $projetos = Projetos::all();
 
-        $lista = DB::table('projetos')->select('id', 'name', 'descricao', 'created_at');
+        // $lista = DB::table('projetos')->select('id', 'name', 'descricao', 'created_at');
 
         return view('projetos\index', [
             'projetos' => $projetos
@@ -102,69 +102,48 @@ class ProjetosController extends Controller
     public function edit(Request $request)
     {
         
-        if($request->id){
+        // if($request->id){
 
 
 
-            $users = User::all();    
+        //     // $users = User::all();  
+            
+        //     $users = DB::table('users')->select('id', 'name', 'email');
 
-            $id = implode($request->id);
+        //     $id = implode($request->id);
 
-            $projetos = DB::table('projetos')->where('id', $request->id)->first();
+        //     $projetos = DB::table('projetos')->where('id', $request->id)->first();
 
+        //     $usersProjetos = DB::table('users')
+        //         ->join('users_projetos', 'users.id', '=', 'users_projetos.users_id')
+        //         ->select('id', 'name', 'email')
+        //         ->where('users_projetos.projetos_id', '=', $request->id)
+        //         ->union($users)
+        //         ->get();
 
-            $usersComProjetoss = DB::table('users')
-                ->select('users.id')
-                ->join('users_projetos', 'users.id', 'users_projetos.users_id')
-                // ->leftJoin('projetos', 'users_projetos.projetos_id', 'projetos.id')
-                ->where('users_projetos.projetos_id', '=', $request->id)
-                ->get();
+        //     dd($projetos, $usersProjetos, $users);
+            
+        //     return view('projetos\edita', [
+        //         'projetos' => $projetos,
+        //         'users' => $users,
 
-            // $usersComProjetoss->toArray();
+        //     ]);
 
-            $usersComProjetos = DB::table('users')
-                ->select('users.id', 'name', 'email')
-                ->join('users_projetos', 'users.id', 'users_projetos.users_id')
-                // ->leftJoin('projetos', 'users_projetos.projetos_id', 'projetos.id')
-                ->where('users_projetos.projetos_id', '=', $request->id);
-                // ->get();
+        // } else {
 
-            $usersProjetos = DB::table('users')
-                ->distinct('id')
-                ->select('id', 'name', 'email')
-                ->join('users_projetos', 'users.id', 'users_projetos.users_id')
-                // ->leftJoin('projetos', 'users_projetos.projetos_id', 'projetos.id')
-                ->where('users_projetos.projetos_id', '<>', $request->id)
-                ->union($usersComProjetos)
-                ->get();
+        //     $projetos = Projetos::all();
 
-            // $final = DB::table('users')
-            //     ->select('id', 'name', 'email')
-            //     ->join('users_projetos', 'users.id', 'users_projetos.users_id')
-            //     ->where('users_projetos.users_id', '<>', $usersComProjetos->id)
-            //     ->get();
+        //     echo "
+        //         <script>
+        //             alert('Selecione um projeto para editar');
+        //         </script>
+        //     ";
 
-                // SELECT DISTINCT id, name, email FROM users AS U JOIN users_projetos AS UP ON U.id = UP.users_id WHERE UP.projetos_id <> 1 AND UP.users_id <> 2 UNION SELECT DISTINCT id, name, email FROM users AS U JOIN users_projetos AS UP ON U.id = UP.users_id WHERE UP.projetos_id = 1
+        //     return view('projetos\index', [
+        //         'projetos' => $projetos
+        //     ]);
 
-
-                dd($usersComProjetoss->toJson());
-
-            return view('projetos\edita', [
-                'projetos' => $projetos,
-                'users' => $users,
-                // 'usersProjetos' => $usersProjetos,
-                'usersProjetos' => $usersProjetos
-            ]);
-
-        } else {
-
-            echo "
-                <script>
-                    alert('Selecione um projeto para editar');
-                </script>
-            ";
-
-        }
+        // }
 
     }
 

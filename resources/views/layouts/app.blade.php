@@ -26,6 +26,16 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/css/bootstrap.css">
     
     {{-- <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css"> --}}
+
+    <style>
+
+        #form input, select{
+
+            margin-bottom:  10px;
+
+        }        
+
+    </style>
     
 </head>
 <body>

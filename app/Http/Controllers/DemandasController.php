@@ -21,6 +21,8 @@ class DemandasController extends Controller
                     ->join('demandas', 'demandas.projeto_id', '=', 'projetos.id')
                     ->select('projetos.name', 'demandas.id', 'demandas.titulo', 'demandas.descricao', 'demandas.estado', 'demandas.created_at')->get();
 
+        
+
         return view('demandas\index', [
             'dados' => $dados
         ]);
@@ -78,9 +80,31 @@ class DemandasController extends Controller
      * @param  \App\Demandas  $demandas
      * @return \Illuminate\Http\Response
      */
-    public function edit(Demandas $demandas)
+    public function edit(Demandas $demandas, Request $request)
     {
-        //
+
+        // dd($request);
+
+        $projetos = Projetos::all();
+
+        $demandas = DB::table('demandas')
+            ->select()
+            ->where('id', $request->id)
+            ->first();
+
+        $projetoDemandas = DB::table('projetos')
+            ->join('demandas', 'demandas.projeto_id', '=', 'projetos.id')
+            ->select('name', 'projetos.id')
+            ->where('demandas.id', '=', $request->id)
+            ->first();
+
+        // dd($projetoDemandas);
+
+        return view('demandas\edita', [
+            'projetos' => $projetos,
+            'projetoDemandas' => $projetoDemandas,
+            'demandas' => $demandas
+        ]);
     }
 
     /**
@@ -92,7 +116,15 @@ class DemandasController extends Controller
      */
     public function update(Request $request, Demandas $demandas)
     {
-        //
+
+        $demandas->titulo = $request->titulo;
+        $demandas->descricao = $request->descricao;
+        $demandas->estado = $request->estado;
+        $demandas->projeto_id = $request->Projeto;
+        $demandas->save();
+
+        return redirect()->route('listaDemandas');
+
     }
 
     /**

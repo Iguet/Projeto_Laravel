@@ -3,10 +3,11 @@
 @section('content')
     <div class="container">
         <div class="container">
-            <form class="form-group" action=" {{ route('updateProjetos') }} " method="post">
+            <form class="form-group" action=" {{ route('updateProjetos', ['projetos' => $projetos->id]) }} " method="post">
                 @csrf
+                @method('PUT')
                 <div class="form-group">
-                    <input type="hidden" name="idProjetos" value=" {{ $projetos->id }} ">
+                    {{-- <input type="hidden" name="idProjetos" value=" {{ $projetos->id }} "> --}}
                     <input class="form-control" type="text" name="nome" id="NomeEditaProjeto" placeholder="Nome" value="{{ $projetos->name }}">
                 </div>
                 <div class="form-group">
