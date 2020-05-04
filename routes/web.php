@@ -23,9 +23,10 @@ Route::group(['prefix' => 'demandas'], function () {
     
     Route::get('/', 'DemandasController@index')->name('listaDemandas');
     Route::get('/cadastrar', 'DemandasController@create')->name('formDemandas');
-    Route::post('/cadastrar/store', 'DemandasController@store')->name('cadastroDemandas');
-    Route::get('/editar', 'DemandasController@edit')->name('editaDemandas');
-    Route::put('/editar/{demandas}', 'DemandasController@update')->name('updateDemandas');
+    Route::post('/', 'DemandasController@store')->name('cadastroDemandas');
+    Route::get('/{id}/editar', 'DemandasController@edit')->name('editaDemandas');
+    Route::put('/{id}', 'DemandasController@update')->name('updateDemandas');
+    Route::post('/{id}', 'DemandasController@destroy')->name('destroyDemandas');
 
 });
 
@@ -33,9 +34,11 @@ Route::group(['prefix' => 'projetos'], function () {
     
     Route::get('/', 'ProjetosController@index')->name('listaProjetos');
     Route::get('/cadastrar', 'ProjetosController@create')->name('formProjetos');
-    Route::post('/cadastrar/store', 'ProjetosController@store')->name('cadastroProjetos');
-    Route::post('/editar', 'ProjetosController@edit')->name('editaProjetos');
-    Route::put('/editar/{projetos}', 'ProjetosController@update')->name('updateProjetos');
+    Route::post('/', 'ProjetosController@store')->name('cadastroProjetos');
+    Route::get('/{id}/editar', 'ProjetosController@edit')->name('editaProjetos');
+    Route::put('/{id}', 'ProjetosController@update')->name('updateProjetos');
+    Route::post('/{id}', 'ProjetosController@destroy')->name('destroyProjetos');
+    Route::get('/dataTables', 'ProjetosController@show')->name('dataUsers');
     // Route::get('/users', 'ProjetosController@show')->name('showUsersProjetos');
 
 });

@@ -2,40 +2,41 @@
 
 @section('content')
     <div class="container">
-        <form action=" {{ route('editaDemandas') }} " method="GET">
+        <form>
+            @csrf
             <div class="row">
             <h2>Demandas</h2>
-                @csrf
                 <table class="table table-striped table-bordered tabela">
                     <thead>
                         <tr>
-                            <th></th>
+                            {{-- <th></th> --}}
                             <th>Projeto</th>
                             <th>Titulo</th>
                             <th>Descrição</th>
                             <th>Estado</th>
                             <th>Data de Criação</th>
+                            <th></th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($dados as $demandas)
-                        <tr>
-                            {{-- <input type="hidden" name="name" value=" {{ $demandas->name }} "> --}}
-                                <td> <input type="radio" name="id" value=" {{ $demandas->id }} "> </td>
+                            <tr>
+
+                                {{-- @method('DELETE') --}}
                                 <td> {{ $demandas->name}} </td>
                                 <td> {{ $demandas->titulo }} </td>
                                 <td> {{ $demandas->descricao }} </td>
                                 <td> {{ $demandas->estado }} </td>
                                 <td> {{ $demandas->created_at }} </td>
+                                <td> <input type="submit" class="btn" formaction=" {{ route('destroyDemandas', ['id' => $demandas->id]) }} " formmethod="POST" value="Deletar"> </td>
+                                <td> <input type="submit" class="btn" formaction=" {{ route('editaDemandas', ['id' => $demandas->id]) }} " formmethod="GET" value="Editar"> </td>
                             </tr>
                         @endforeach
                     </tbody>
                 </table>
-                <input class="btn btn-default" type="submit" value="Editar">
-            </form>
-            <form method="get" action="{{ route('formDemandas') }}" >
-                {{-- <input id="formEdita" type="button" class="btn btn-default btn-footer"  id="editarDemandas" value="editar" data-toggle="modal" data-target="#editaModal"> --}}
-                <input id="Nova" type="submit" class="btn btn-default btn-footer" value="Cadastrar">
+                {{-- <input class="btn btn-default" type="submit" value="Editar"> --}}
+                <input id="Nova" type="submit" class="btn" formmethod="GET" formaction=" {{ route('formDemandas') }} " value="Cadastrar">
             </form>
         </div>
     </div>   

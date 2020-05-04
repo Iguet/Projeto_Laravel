@@ -19,7 +19,8 @@ class DemandasController extends Controller
 
         $dados = DB::table('projetos')
                     ->join('demandas', 'demandas.projeto_id', '=', 'projetos.id')
-                    ->select('projetos.name', 'demandas.id', 'demandas.titulo', 'demandas.descricao', 'demandas.estado', 'demandas.created_at')->get();
+                    ->select('projetos.name', 'demandas.id', 'demandas.titulo', 'demandas.descricao', 'demandas.estado', 'demandas.created_at')
+                    ->get();
 
         
 
@@ -80,7 +81,7 @@ class DemandasController extends Controller
      * @param  \App\Demandas  $demandas
      * @return \Illuminate\Http\Response
      */
-    public function edit(Demandas $demandas, Request $request)
+    public function edit(Demandas $demandas, Request $request, $id)
     {
 
         // dd($request);
@@ -89,14 +90,18 @@ class DemandasController extends Controller
 
         $demandas = DB::table('demandas')
             ->select()
-            ->where('id', $request->id)
+            ->where('id', $id)
             ->first();
+
+            // dd($demandas);
 
         $projetoDemandas = DB::table('projetos')
             ->join('demandas', 'demandas.projeto_id', '=', 'projetos.id')
             ->select('name', 'projetos.id')
-            ->where('demandas.id', '=', $request->id)
+            ->where('demandas.id', '=', $id)
             ->first();
+
+
 
         // dd($projetoDemandas);
 
@@ -114,14 +119,16 @@ class DemandasController extends Controller
      * @param  \App\Demandas  $demandas
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Demandas $demandas)
+    public function update(Request $request, Demandas $demandas, $id)
     {
 
-        $demandas->titulo = $request->titulo;
-        $demandas->descricao = $request->descricao;
-        $demandas->estado = $request->estado;
-        $demandas->projeto_id = $request->Projeto;
-        $demandas->save();
+        $dados = $demandas->find($id);
+        // dd($dados);
+        $dados->titulo = $request->titulo;
+        $dados->descricao = $request->descricao;
+        $dados->estado = $request->estado;
+        $dados->projeto_id = $request->Projeto;
+        $dados->save();
 
         return redirect()->route('listaDemandas');
 
@@ -133,8 +140,13 @@ class DemandasController extends Controller
      * @param  \App\Demandas  $demandas
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Demandas $demandas)
+    public function destroy(Demandas $demandas, $id)
     {
-        //
+        
+        $result = $demandas->find($id);
+        // dd($result);
+        $result->delete();
+        return redirect()->route('listaDemandas');
+
     }
 }

@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Projetos;
 use App\User;
 use App\UsersProjetos;
-use Yajra\DataTables\Services\DataTable;
+use DataTables;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -21,10 +21,18 @@ class ProjetosController extends Controller
         
         $projetos = Projetos::all();
 
+        // $user = Auth::user();
+
+        // $id = $user->id;
+
+        $path = base_path();
+
+
         // $lista = DB::table('projetos')->select('id', 'name', 'descricao', 'created_at');
 
         return view('projetos\index', [
-            'projetos' => $projetos
+            'projetos' => $projetos,
+            
         ]);
            
     }
@@ -54,6 +62,11 @@ class ProjetosController extends Controller
     public function store(Request $request)
     {
         
+        // $validatedData = $request->validate([
+        //     'title' => 'required|unique:posts|max:255',
+        //     'body' => 'required',
+        // ]);
+
         $projetos = new Projetos();
         $usersProjetos = new UsersProjetos();
 
@@ -88,7 +101,16 @@ class ProjetosController extends Controller
     public function show(Projetos $projetos)
     {
         
-        $users = User::all();
+        // $users = User::all();
+
+        // die('asaadas');
+
+        // dd($array);
+        
+        $users = DB::table('users')
+        ->select();
+
+        return dataTables::of($users)->make(true);
 
 
     }
@@ -99,51 +121,66 @@ class ProjetosController extends Controller
      * @param  \App\Projetos  $projetos
      * @return \Illuminate\Http\Response
      */
-    public function edit(Request $request)
+    public function edit(Request $request, Projetos $projetos, User $users, $id)
     {
-        
-        // if($request->id){
-
-
-
-        //     // $users = User::all();  
             
-        //     $users = DB::table('users')->select('id', 'name', 'email');
+            $result = $projetos->find($id);
 
-        //     $id = implode($request->id);
+            $array = [];
 
-        //     $projetos = DB::table('projetos')->where('id', $request->id)->first();
+            // $path = base_path();
 
-        //     $usersProjetos = DB::table('users')
-        //         ->join('users_projetos', 'users.id', '=', 'users_projetos.users_id')
-        //         ->select('id', 'name', 'email')
-        //         ->where('users_projetos.projetos_id', '=', $request->id)
-        //         ->union($users)
-        //         ->get();
-
-        //     dd($projetos, $usersProjetos, $users);
+            $usersProjetos = DB::table('users')
+                ->join('users_projetos', 'users.id', '=', 'users_projetos.users_id')
+                ->select('users.id', 'users.name', 'users.email')
+                ->where('projetos_id', '=', $id)
+                ->get();
             
-        //     return view('projetos\edita', [
-        //         'projetos' => $projetos,
-        //         'users' => $users,
+            $dados = $users->all();
 
-        //     ]);
+            $id = DB::table('users')
+                ->select('id')
+                ->get();
 
-        // } else {
+            foreach ($dados as $usuarios) {
+                
+                $flag = false;
 
-        //     $projetos = Projetos::all();
+                foreach ($usersProjetos as $UP) {
+                    
+                    if($usuarios->id == $UP->id){
+                        
+                        $array[] = 1;
+                        $flag = true;
 
-        //     echo "
-        //         <script>
-        //             alert('Selecione um projeto para editar');
-        //         </script>
-        //     ";
+                        break;
 
-        //     return view('projetos\index', [
-        //         'projetos' => $projetos
-        //     ]);
+                    }
 
-        // }
+                }
+                
+                if($flag == false){
+
+                    $array[] = 0;
+
+                }
+
+            }
+            
+            // dd($array);
+            
+            return view('projetos\edita', [
+                'projetos' => $result,
+                'users' => $dados,
+                'array' => $array,
+                'id' => $id
+
+            ]);
+
+
+
+            // return $array;
+
 
     }
 
@@ -214,8 +251,20 @@ class ProjetosController extends Controller
      * @param  \App\Projetos  $projetos
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Projetos $projetos)
+    public function destroy(Projetos $projetos, UsersProjetos $usersProjetos, $id)
     {
-        //
+
+        // $usersProjetos->select($id)
+        //     ->where('projetos_id')
+        //     ->delete();
+
+        DB::table('users_projetos')
+            ->where('projetos_id', $id)
+            ->delete();
+        
+        $projetos->find($id)->delete();
+
+        return redirect()->route('listaProjetos');
+
     }
 }

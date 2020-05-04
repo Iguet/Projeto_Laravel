@@ -4,7 +4,7 @@
     <div class="container">
         <h2 class="display-4">Editar Demanda</h2>
         <div class="container">
-            <form class="form-group" id="form"  action=" {{ route('updateDemandas', ['demandas' => $demandas->id]) }} " method="post" >
+            <form class="form-group" id="form"  action=" {{ route('updateDemandas', ['id' => $demandas->id]) }} " method="post" >
                 @method('PUT')
                 @csrf
                 <div>
