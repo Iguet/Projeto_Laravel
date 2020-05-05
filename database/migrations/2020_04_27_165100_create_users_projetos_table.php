@@ -16,8 +16,8 @@ class CreateUsersProjetosTable extends Migration
         Schema::create('users_projetos', function (Blueprint $table) {
             $table->unsignedBigInteger('users_id');
             $table->unsignedBigInteger('projetos_id');
-            $table->foreign('users_id')->references('id')->on('users');
-            $table->foreign('projetos_id')->references('id')->on('projetos');
+            $table->foreign('users_id')->references('id')->on('users')->onDelete('cascade');
+            $table->foreign('projetos_id')->references('id')->on('projetos')->onDelete('cascade');
             $table->timestamps();
         });
     }

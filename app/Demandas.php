@@ -25,4 +25,9 @@ class Demandas extends Model
         return $this->hasOne('App\Projetos');
     }
 
+    public function user()
+    {
+        return $this->hasOne('App\User');
+    }
+
 }

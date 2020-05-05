@@ -20,13 +20,14 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::group(['prefix' => 'demandas'], function () {
-    
+        
     Route::get('/', 'DemandasController@index')->name('listaDemandas');
     Route::get('/cadastrar', 'DemandasController@create')->name('formDemandas');
     Route::post('/', 'DemandasController@store')->name('cadastroDemandas');
-    Route::get('/{id}/editar', 'DemandasController@edit')->name('editaDemandas');
+    Route::get('/{id}/{idProjeto}/editar', 'DemandasController@edit')->name('editaDemandas');
     Route::put('/{id}', 'DemandasController@update')->name('updateDemandas');
-    Route::post('/{id}', 'DemandasController@destroy')->name('destroyDemandas');
+    Route::post('/delete/{id}', 'DemandasController@destroy')->name('destroyDemandas');
+    Route::post('/ajax', 'DemandasController@show')->name('ajaxDemandas');
 
 });
 
@@ -38,7 +39,5 @@ Route::group(['prefix' => 'projetos'], function () {
     Route::get('/{id}/editar', 'ProjetosController@edit')->name('editaProjetos');
     Route::put('/{id}', 'ProjetosController@update')->name('updateProjetos');
     Route::post('/{id}', 'ProjetosController@destroy')->name('destroyProjetos');
-    Route::get('/dataTables', 'ProjetosController@show')->name('dataUsers');
-    // Route::get('/users', 'ProjetosController@show')->name('showUsersProjetos');
 
 });

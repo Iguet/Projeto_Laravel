@@ -3,10 +3,10 @@
 @section('content')
     <div class="container">
         <div class="container">
-            {{-- <form class="form-group" action=" {{ route('updateProjetos', ['projetos' => $projetos->id]) }} " method="post"> --}}
+            <form class="form-group" action=" {{ route('updateProjetos', ['id' => $projetos->id], ['idUser' => $id]) }} " method="post">
                 @csrf
                 {{-- {{ $path }} --}}
-                {{-- @method('PUT') --}}
+                @method('PUT')
                 <div class="form-group">
                     {{-- <input type="hidden" name="idProjetos" value=" {{ $projetos->id }} "> --}}
                     <input class="form-control" type="text" name="nome" id="NomeEditaProjeto" placeholder="Nome" value="{{ $projetos->name }}">
@@ -27,7 +27,7 @@
                     </thead>
                     <tbody>
 
-                        {{-- @foreach ($users as $user)
+                        @foreach ($tem as $user)
 
                             <tr>
                                 <td><input type="checkbox" checked name="id[]" value=" {{ $user->id }} "></td>
@@ -35,24 +35,23 @@
                                 <td> {{ $user->name }} </td>
                                 <td> {{ $user->email }} </td>
                             </tr>    
-                            @foreach ($array as $verifica)
 
-                                @if ($verifica == true)
-                                        <td><input type="checkbox" checked name="id[]" value=" {{ $user->id }} "></td>
+                        @endforeach
+                        @foreach ($naotem as $verifica)
 
-                                @else
-                                
-                                        <td><input type="checkbox" name="id[]" value=" {{ $user->id }} "></td>
-                                @endif
+                        <tr>
+                            <td><input type="checkbox" name="id[]" value=" {{ $verifica->id }} "></td>
+                            <td> {{ $verifica->id }} </td>
+                            <td> {{ $verifica->name }} </td>
+                            <td> {{ $verifica->email }} </td>
+                        </tr>  
 
-                            @endforeach
-
-                        @endforeach --}}
+                        @endforeach
 
                     </tbody>
                 </table>
                     <input class="btn btn-inserir btn-default" type="submit" value="Editar" name="Projeto">
-            {{-- </form> --}}
+            </form>
         </div>
     </div>
 
@@ -67,65 +66,7 @@
 
         $(document).ready(function () {
 
-            var array = [];
-            var array = '{!! json_encode($array) !!}';
-            // alert(array);
-            var cont = 1;
-
-            // alert(array);
-
-            $('#tabela').DataTable({
-                // responsive: true,
-                // processing: true,
-                // serverSide: true,
-                ajax: {
-                    url: 'http://localhost/projetaoLaravel/public/projetos/dataTables',
-                    type: 'GET',
-                },
-                columns: [
-                    {
-                        render: function ( data, type, row ) {
-                            return '<input type="checkbox" name="id[]" value='+cont+++' id="checkbox">';
-                            return data;
-                            cont++;
-                        },
-                    },
-                    { data: 'id', name: 'id' },
-                    { data: 'name', name: 'name' },
-                    { data: 'email', name: 'email' }
-                    // {data: 'nome'         , name: 'pessoas.nome'},
-                ],
-
-            });
-
-            for (let i = 0; i < array.length; i++) {
-                
-
-                if(array[i] == 1){
-
-                    $("input [value =   ]").prop('checked', true);
-
-                }
-                
-            }
-
-            // $('#tabela').DataTable({
-            //     // responsive: true,
-            //     // processing: true,
-            //     // serverSide: true,
-            //     ajax: {
-            //         url: 'http://localhost/projetaoLaravel/public/projetos/dataTables',
-            //         type: 'GET',
-            //     },
-            //     columns: [
-            //         { }
-            //         { data: 'id', name: 'id' },
-            //         { data: 'name', name: 'name' },
-            //         { data: 'email', name: 'email' }
-            //         // {data: 'nome'         , name: 'pessoas.nome'},
-            //     ],
-
-            // });
+            $('#tabela').DataTable();
 
         });
 

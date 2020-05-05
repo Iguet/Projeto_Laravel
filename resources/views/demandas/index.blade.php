@@ -11,6 +11,7 @@
                         <tr>
                             {{-- <th></th> --}}
                             <th>Projeto</th>
+                            <th>Encarregado</th>
                             <th>Titulo</th>
                             <th>Descrição</th>
                             <th>Estado</th>
@@ -24,13 +25,14 @@
                             <tr>
 
                                 {{-- @method('DELETE') --}}
-                                <td> {{ $demandas->name}} </td>
+                                <td> {{ $demandas->nomeProjeto}} </td>
+                                <td> {{ $demandas->name }} </td>
                                 <td> {{ $demandas->titulo }} </td>
                                 <td> {{ $demandas->descricao }} </td>
                                 <td> {{ $demandas->estado }} </td>
                                 <td> {{ $demandas->created_at }} </td>
                                 <td> <input type="submit" class="btn" formaction=" {{ route('destroyDemandas', ['id' => $demandas->id]) }} " formmethod="POST" value="Deletar"> </td>
-                                <td> <input type="submit" class="btn" formaction=" {{ route('editaDemandas', ['id' => $demandas->id]) }} " formmethod="GET" value="Editar"> </td>
+                                <td> <input type="submit" class="btn" formaction=" {{ route('editaDemandas', ['id' => $demandas->id, 'idProjeto' => $demandas->idProjeto]) }} " formmethod="GET" value="Editar"> </td>
                             </tr>
                         @endforeach
                     </tbody>

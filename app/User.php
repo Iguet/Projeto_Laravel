@@ -41,4 +41,9 @@ class User extends Authenticatable
     {
         return $this->belongsToMany('App\UsersProjetos');
     }
+
+    public function demandas()
+    {
+        return $this->belongsToMany('App\Demandas');
+    }
 }

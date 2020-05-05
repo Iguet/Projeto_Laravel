@@ -15,6 +15,14 @@
         </select>
       </div>
       <div class="form-group">
+        <select class="form-control" name="User">
+          <option>Encarregado</option>
+          @foreach ($users as $user) 
+            <option value="{{ $user->id }}">{{ $user->name }}</option>
+          @endforeach
+        </select>
+      </div>
+      <div class="form-group">
         <input class="form-control" type="text" name="Titulo" id="Titulo" placeholder="Titulo">
       </div>
       <div class="form-group">
