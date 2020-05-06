@@ -21,7 +21,7 @@ class CreateDemandasTable extends Migration
             $table->text('descricao');
             $table->enum('estado', ['nova', 'em progresso', 'parada', 'finalizada']);
             $table->foreign('projeto_id')->references('id')->on('projetos');
-            $table->foreign('user_id')->references('id')->on('demandas');
+            $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
         });
     }

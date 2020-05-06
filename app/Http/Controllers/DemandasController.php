@@ -5,8 +5,11 @@ namespace App\Http\Controllers;
 use App\Demandas;
 use App\Projetos;
 use App\User;
+use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
 
 class DemandasController extends Controller
 {
@@ -18,16 +21,44 @@ class DemandasController extends Controller
     public function index(Demandas $demandas)
     {
 
+        // dd($this->autorize('view', $demandas))
+
+        // Role::create(['name' => 'Admin Projetos']);
+        // Role::create(['name' => 'Admin Demandas']);
+        // Role::create(['name' => 'Admin']);
+        // Role::create(['name' => 'User Padrao']);
+        // Permission::create(['name' => 'Criar Projetos']);
+        // Permission::create(['name' => 'Criar Demandas']);
+        // Permission::create(['name' => 'Editar Projetos']);
+        // Permission::create(['name' => 'Editar Demandas']);
+        // Permission::create(['name' => 'Deletar Projetos']);
+        // Permission::create(['name' => 'Deletar Demandas']);
+        // Permission::create(['name' => 'Vizualizar Projetos']);
+        // Permission::create(['name' => 'Vizualizar Demandas']);
+
+        // $role = Role::findById(2);
+
+        // $permission = array();
+
+        // $permission = Permission::all();
+        // $permission[] = Permission::findById(4);
+        // $permission[] = Permission::findById(7);
+        // $permission[] = Permission::findById(8);
+        // $permission[] = Permission::findById(2);
+        // $permission = Permission::findById(1);
+
+        // $role->givePermissionTo($permission);
+
+
+        $id = Auth::user()->id;
+
         $dados = DB::table('projetos')
                     ->join('demandas', 'demandas.projeto_id', '=', 'projetos.id')
                     ->join('users', 'users.id', '=', 'demandas.user_id')
                     ->select('projetos.name as nomeProjeto', 'projetos.id as idProjeto', 'users.name', 'demandas.id', 'demandas.titulo', 'demandas.descricao', 'demandas.estado', 'demandas.created_at')
+                    ->where('demandas.user_id', '=', $id)
                     ->get();
 
-        // dD($dados);
-
-        // dd($dados);
-        
 
         return view('demandas\index', [
             'dados' => $dados
@@ -61,7 +92,17 @@ class DemandasController extends Controller
      */
     public function store(Request $request)
     {   
-        // dd($request);
+        // dd($request)
+
+        $validatedData = $request->validate([
+            'Titulo' => ['unique:demandas', 'max:50'],
+            'Descricao' => ['required'],
+            'Projeto' => ['required', 'numeric'],
+            'User' => ['required', 'numeric'],
+        ]);
+
+        // dd($validatedData);
+
         $demandas = new Demandas;
         $demandas->titulo = $request->Titulo;
         $demandas->descricao = $request->Descricao;
@@ -97,18 +138,6 @@ class DemandasController extends Controller
             ->where('users_projetos.projetos_id', '=', $idProjeto)
             ->get();
 
-        // $array = $result->toJson(); 
-
-        // while ($result->isNotEmpty()) {
-           
-        //     $array[] = array_map('utf8_encode', $result);
-
-        // }
-        // die($result);
-
-        // $result->toJson();
-
-
         echo json_encode($result);   
 
     }
@@ -122,18 +151,12 @@ class DemandasController extends Controller
     public function edit(Demandas $demandas, Request $request, $id, $idProjeto)
     {
 
-        // dd($idProjeto);
-
         $projetos = Projetos::all();
-
-        $users = User::all();
 
         $demandas = DB::table('demandas')
             ->select()
             ->where('id', $id)
             ->first();
-
-            // dd($demandas);
 
         $projetoDemandas = DB::table('projetos')
             ->join('demandas', 'demandas.projeto_id', '=', 'projetos.id')
@@ -141,36 +164,22 @@ class DemandasController extends Controller
             ->where('demandas.id', '=', $id)
             ->first();
 
-        // $userDemandas = DB::table('users')
-        //     ->join('demandas', 'demandas.user_id', '=', 'users.id')
-        //     ->select('name', 'users.id')
-        //     ->where('demandas.id', '=', $id)
-        //     ->first();
+        $userDemandas = DB::table('users')
+            ->join('demandas', 'demandas.user_id', '=', 'users.id')
+            ->select('name', 'users.id')
+            ->where('demandas.id', '=', $id)
+            ->first();
 
-        $userDemandas = DB::table('users_projetos')
-            ->join('users', 'users_projetos.users_id', '=', 'users.id')
-            ->select('users.id')
-            ->where('users_projetos.projetos_id', '=', $idProjeto)
-            ->get();
-
-        // dd($userDemandas);
-
-        // $userDemandas = DB::table('users')
-        //         ->join('demandas', 'demandas.user_id', '=', 'users.id')
-        //         ->join('projetos', 'users.id', '=', 'demandas.user_id')
-        //         ->select( 'users.name', 'demandas.id', 'demandas.titulo', 'demandas.descricao', 'demandas.estado', 'demandas.created_at')
-        //         ->get();
-
-                // dd($userDemandas);
-
-        // dd($dados);
-
-        // dd($projetoDemandas);
+        $usersProjetos = DB::table('users')
+                ->join('users_projetos', 'users.id', '=', 'users_projetos.users_id')
+                ->select('users.id', 'users.name', 'users.email')
+                ->where('projetos_id', '=', $idProjeto)
+                ->get();
 
         return view('demandas\edita', [
             'projetos' => $projetos,
             'projetoDemandas' => $projetoDemandas,
-            'users' => $users,
+            'usersProjetos' => $usersProjetos,
             'userDemandas' => $userDemandas,
             'demandas' => $demandas
         ]);
@@ -186,10 +195,9 @@ class DemandasController extends Controller
     public function update(Request $request, Demandas $demandas, $id)
     {
 
-        dd($request);
+        // dd($request);
 
         $dados = $demandas->find($id);
-        // dd($dados);
         $dados->titulo = $request->titulo;
         $dados->descricao = $request->descricao;
         $dados->estado = $request->estado;

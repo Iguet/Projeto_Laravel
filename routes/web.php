@@ -11,6 +11,11 @@
 |
 */
 
+// Route::group(], function () {
+//     //
+// });
+
+
 Route::get('/', function () {
     return view('welcome');
 });
@@ -19,7 +24,9 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::group(['prefix' => 'demandas'], function () {
+Route::post('/permissions', 'PermissionsController@permissions')->name('permissions')->middleware('auth');
+
+Route::group(['prefix' => 'demandas', 'middleware' => 'auth'], function () {
         
     Route::get('/', 'DemandasController@index')->name('listaDemandas');
     Route::get('/cadastrar', 'DemandasController@create')->name('formDemandas');
@@ -31,7 +38,7 @@ Route::group(['prefix' => 'demandas'], function () {
 
 });
 
-Route::group(['prefix' => 'projetos'], function () {
+Route::group(['prefix' => 'projetos', 'middleware' => 'auth'], function () {
     
     Route::get('/', 'ProjetosController@index')->name('listaProjetos');
     Route::get('/cadastrar', 'ProjetosController@create')->name('formProjetos');
@@ -41,3 +48,14 @@ Route::group(['prefix' => 'projetos'], function () {
     Route::post('/{id}', 'ProjetosController@destroy')->name('destroyProjetos');
 
 });
+
+Route::group(['prefix' => 'comentarios', 'middleware' => 'auth'], function () {
+    
+    Route::post('/', 'ComentariosController@index')->name('listaComentarios');
+    Route::post('/adicionar', 'ComentariosController@store')->name('storeComentarios');
+
+});
+
+// Route::get('profile', function () {
+//     // Only authenticated users may enter...
+// })

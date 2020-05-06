@@ -30,4 +30,9 @@ class Demandas extends Model
         return $this->hasOne('App\User');
     }
 
+    public function comentarios()
+    {
+        return $this->belongsToMany('App\Comentarios');
+    }
+
 }

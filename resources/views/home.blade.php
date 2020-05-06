@@ -21,3 +21,39 @@
     </div>
 </div>
 @endsection
+
+@section('scripts')
+    
+    <script type="text/javascript">
+    
+        jQuery(document).ready(function(){
+
+            $.ajax({
+
+                url: " {{ route('permissions') }} ",
+                dataType: 'json',
+                type: 'POST',
+                data: {
+
+                    _token: '{{csrf_token()}}',
+
+                },
+                success: function(data){
+                    
+                    console.log(data);
+
+                },
+
+                complete: function(data){
+
+                    console.log(data);
+
+                }
+
+            });
+
+        });
+
+    </script>
+
+@endsection
