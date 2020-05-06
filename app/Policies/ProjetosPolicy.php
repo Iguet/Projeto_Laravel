@@ -56,26 +56,26 @@ class ProjetosPolicy
      * @param  \App\Projetos  $projetos
      * @return mixed
      */
-    public function update(User $user, Projetos $projetos, UsersProjetos $usersProjetos, $id)
+    public function update()
     {
         $idUser = Auth::user()->id;
 
         $users = User::permission('Editar Projetos')->get();
 
+        $flag = "";
+
         foreach ($users as $key) {
             
             if($key->id === $idUser){
 
-                return $key->id === $idUser;
+                $flag = $key->id;
                 
-            } else {
-
-                return $key->id === $idUser;
-
             }
 
 
         }
+
+        return $flag === $idUser;
 
 
         // $idUser = Auth::user()->id;

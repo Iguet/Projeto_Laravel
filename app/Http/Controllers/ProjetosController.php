@@ -194,74 +194,51 @@ class ProjetosController extends Controller
     public function update(Request $request, Projetos $projetos, UsersProjetos $usersProjetos, $id)
     {
 
-        $idAuth = Auth::user()->id;
+        $this->authorize('update', $projetos);
+        
+        
 
-        $idUserProjeto = DB::table('users_projetos')
-            ->select('projetos_id')
-            ->where('users_id', $idAuth)
-            ->get();
+        $validatedData = $request->validate([
+            'name' => 'unique:projetos|max:50',
+            'descricao' => 'required',
+        ]);
 
-            // dd($id);
-            
-        foreach ($idUserProjeto as $projetoId) {
-            
-            // echo($projetoId->projetos_id);
+        $usersProjetos = new UsersProjetos;
 
-            if ($projetoId->projetos_id == $id){
+        $result = $projetos->find($id);
+
+        $result->name = $request->nome;
+        $result->descricao = $request->descricao;
+        $result->save();
+
+        if($request->has('id')){
+
+            $consultaUsersProjetos = DB::table('users')
+                ->select('users.id', 'name', 'email')
+                ->join('users_projetos', 'users.id', 'users_projetos.users_id')
+                ->where('users_projetos.projetos_id', '=', $id)
+                ->get();
+
                 
-                $validatedData = $request->validate([
-                    'name' => 'unique:projetos|max:50',
-                    'descricao' => 'required',
-                ]);
-        
-                $usersProjetos = new UsersProjetos;
-        
-                $result = $projetos->find($id);
-        
-                $result->name = $request->nome;
-                $result->descricao = $request->descricao;
-                $result->save();
-        
-                if($request->has('id')){
-        
-                    $consultaUsersProjetos = DB::table('users')
-                        ->select('users.id', 'name', 'email')
-                        ->join('users_projetos', 'users.id', 'users_projetos.users_id')
-                        ->where('users_projetos.projetos_id', '=', $id)
-                        ->get();
-        
+                if($consultaUsersProjetos != ''){
+
+                    DB::table('users_projetos')->where('projetos_id', '=', $id)->delete();
+                
+                    foreach ($request->id as $consulta){
                         
-                        if($consultaUsersProjetos != ''){
-        
-                            DB::table('users_projetos')->where('projetos_id', '=', $id)->delete();
-                        
-                            foreach ($request->id as $consulta){
-                                
-                                DB::table('users_projetos')->Insert(
-                                    [ 'users_id' => $consulta, 'projetos_id' => $id, 'created_at' => now(), 'updated_at' => now() ]
-                                );
-        
-                            }
-                        }
-                            
-                } else {
-        
-                    DB::table('users_projetos')->where('projetos_id', '=', $id)->delete();            
+                        DB::table('users_projetos')->Insert(
+                            [ 'users_id' => $consulta, 'projetos_id' => $id, 'created_at' => now(), 'updated_at' => now() ]
+                        );
+
+                    }
                 }
-        
-                return redirect()->route('listaProjetos');
+                    
+        } else {
 
-            } else {
-
-                return redirect()->route('listaProjetos');
-
-            }
-
+            DB::table('users_projetos')->where('projetos_id', '=', $id)->delete();            
         }
-        
-        
 
-        
+        return redirect()->route('listaProjetos');
 
     }
 
