@@ -21,48 +21,35 @@ class DemandasController extends Controller
     public function index(Demandas $demandas)
     {
 
-        // dd($this->autorize('view', $demandas))
-
-        // Role::create(['name' => 'Admin Projetos']);
-        // Role::create(['name' => 'Admin Demandas']);
-        // Role::create(['name' => 'Admin']);
-        // Role::create(['name' => 'User Padrao']);
-        // Permission::create(['name' => 'Criar Projetos']);
-        // Permission::create(['name' => 'Criar Demandas']);
-        // Permission::create(['name' => 'Editar Projetos']);
-        // Permission::create(['name' => 'Editar Demandas']);
-        // Permission::create(['name' => 'Deletar Projetos']);
-        // Permission::create(['name' => 'Deletar Demandas']);
-        // Permission::create(['name' => 'Vizualizar Projetos']);
-        // Permission::create(['name' => 'Vizualizar Demandas']);
-
-        // $role = Role::findById(2);
-
-        // $permission = array();
-
-        // $permission = Permission::all();
-        // $permission[] = Permission::findById(4);
-        // $permission[] = Permission::findById(7);
-        // $permission[] = Permission::findById(8);
-        // $permission[] = Permission::findById(2);
-        // $permission = Permission::findById(1);
-
-        // $role->givePermissionTo($permission);
-
+        $this->authorize('viewAny', $demandas);
 
         $id = Auth::user()->id;
 
-        $dados = DB::table('projetos')
-                    ->join('demandas', 'demandas.projeto_id', '=', 'projetos.id')
-                    ->join('users', 'users.id', '=', 'demandas.user_id')
-                    ->select('projetos.name as nomeProjeto', 'projetos.id as idProjeto', 'users.name', 'demandas.id', 'demandas.titulo', 'demandas.descricao', 'demandas.estado', 'demandas.created_at')
-                    ->where('demandas.user_id', '=', $id)
-                    ->get();
+        $user = Auth::user();
 
+        if ($user->hasAnyRole('Admin Demandas', 'Admin')){
+
+            $dados = DB::table('projetos')
+                        ->join('demandas', 'demandas.projeto_id', '=', 'projetos.id')
+                        ->join('users', 'users.id', '=', 'demandas.user_id')
+                        ->select('projetos.name as nomeProjeto', 'projetos.id as idProjeto', 'users.name', 'demandas.id', 'demandas.titulo', 'demandas.descricao', 'demandas.estado', 'demandas.created_at')
+                        ->get();
+
+        } else {
+
+            $dados = DB::table('projetos')
+                        ->join('demandas', 'demandas.projeto_id', '=', 'projetos.id')
+                        ->join('users', 'users.id', '=', 'demandas.user_id')
+                        ->select('projetos.name as nomeProjeto', 'projetos.id as idProjeto', 'users.name', 'demandas.id', 'demandas.titulo', 'demandas.descricao', 'demandas.estado', 'demandas.created_at')
+                        ->where('demandas.user_id', '=', $id)
+                        ->get();
+    
+        }
 
         return view('demandas\index', [
             'dados' => $dados
         ]);
+
 
     }
 
@@ -71,8 +58,10 @@ class DemandasController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Demandas $demandas)
     {
+
+        $this->authorize('create', $demandas);
         
         $projetos = Projetos::all();
         $users = User::all();
@@ -90,9 +79,10 @@ class DemandasController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request, Demandas $demandas)
     {   
-        // dd($request)
+        
+        $this->authorize('create', $demandas);
 
         $validatedData = $request->validate([
             'Titulo' => ['unique:demandas', 'max:50'],
@@ -151,6 +141,8 @@ class DemandasController extends Controller
     public function edit(Demandas $demandas, Request $request, $id, $idProjeto)
     {
 
+        $this->authorize('view', $demandas);
+
         $projetos = Projetos::all();
 
         $demandas = DB::table('demandas')
@@ -195,7 +187,7 @@ class DemandasController extends Controller
     public function update(Request $request, Demandas $demandas, $id)
     {
 
-        // dd($request);
+        $this->authorize('update', $demandas);
 
         $dados = $demandas->find($id);
         $dados->titulo = $request->titulo;
@@ -217,6 +209,8 @@ class DemandasController extends Controller
      */
     public function destroy(Demandas $demandas, $id)
     {
+
+        $this->authorize('delete', $demandas);
         
         $result = $demandas->find($id);
         // dd($result);

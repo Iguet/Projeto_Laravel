@@ -35,7 +35,20 @@
 
             margin-bottom:  10px;
 
-        }        
+        }
+
+        #label {
+
+            padding-top: 0px;
+
+        }    
+
+        .form-check-inline {
+
+            padding-right: 10px;
+            padding-left: 10px;
+
+        }    
 
     </style>
 
@@ -78,6 +91,11 @@
                             <li>
                                 <a class="nav-link" href="{{ route('listaProjetos') }}">{{ __('Projetos') }}</a>
                             </li>
+                            @hasrole('Admin')
+                                <li>
+                                    <a class="nav-link" href="{{ route('editPermissions') }}">{{ __('Permissões') }}</a>
+                                </li>
+                            @endhasrole
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ Auth::user()->name }} <span class="caret"></span>

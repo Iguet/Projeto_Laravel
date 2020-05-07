@@ -4,6 +4,7 @@ namespace App\Policies;
 
 use App\Demandas;
 use App\User;
+use auth;
 use Illuminate\Auth\Access\HandlesAuthorization;
 
 class DemandasPolicy
@@ -18,7 +19,11 @@ class DemandasPolicy
      */
     public function viewAny(User $user)
     {
-        //
+        
+        $user = Auth::user();
+
+        return $user->can('Vizualizar Demandas');
+
     }
 
     /**
@@ -28,9 +33,13 @@ class DemandasPolicy
      * @param  \App\Demandas  $demandas
      * @return mixed
      */
-    public function view(User $user, Demandas $demandas)
+    public function view(User $user)
     {
-        //
+        
+        $user = Auth::user();
+
+        return $user->can('Vizualizar Demandas');
+
     }
 
     /**
@@ -41,7 +50,11 @@ class DemandasPolicy
      */
     public function create(User $user)
     {
-        //
+        
+        $user = Auth::user();
+
+        return $user->can('Criar Demandas');
+
     }
 
     /**
@@ -51,9 +64,13 @@ class DemandasPolicy
      * @param  \App\Demandas  $demandas
      * @return mixed
      */
-    public function update(User $user, Demandas $demandas)
+    public function update(User $user)
     {
-        //
+        
+        $user = Auth::user();
+
+        return $user->can('Editar Demandas');
+
     }
 
     /**
@@ -63,9 +80,13 @@ class DemandasPolicy
      * @param  \App\Demandas  $demandas
      * @return mixed
      */
-    public function delete(User $user, Demandas $demandas)
+    public function delete(User $user)
     {
-        //
+
+        $user = Auth::user();
+
+        return $user->can('Deletar Demandas');
+
     }
 
     /**

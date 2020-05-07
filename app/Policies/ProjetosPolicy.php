@@ -22,6 +22,10 @@ class ProjetosPolicy
     public function viewAny(User $user)
     {
 
+        $user = Auth::user();
+
+        return $user->can('Vizualizar Projetos');
+
     }
 
     /**
@@ -45,7 +49,9 @@ class ProjetosPolicy
     public function create(User $user)
     {
 
-       
+        $user = Auth::user();
+
+        return $user->can('Criar Projetos');
 
     }
 
@@ -58,47 +64,10 @@ class ProjetosPolicy
      */
     public function update()
     {
-        $idUser = Auth::user()->id;
+        $user = Auth::user();
 
-        $users = User::permission('Editar Projetos')->get();
+        return $user->can('Editar Projetos');
 
-        $flag = "";
-
-        foreach ($users as $key) {
-            
-            if($key->id === $idUser){
-
-                $flag = $key->id;
-                
-            }
-
-
-        }
-
-        return $flag === $idUser;
-
-
-        // $idUser = Auth::user()->id;
-
-        // $users = User::permission('Editar Projetos')->get();
-
-        // foreach ($users as $key) {
-            
-        //     if($key->id === $idUser){
-
-        //         echo("AQUI");
-
-        //     } else {
-
-        //         echo("fodase");
-        //     }
-
-
-        // }
-
-        // dd($users);
-
-        // return $result;
     }
 
     /**
@@ -108,9 +77,11 @@ class ProjetosPolicy
      * @param  \App\Projetos  $projetos
      * @return mixed
      */
-    public function delete(User $user, Projetos $projetos)
+    public function delete(User $user)
     {
-        //
+        $user = Auth::user();
+
+        return $user->can('Deletar Projetos');
     }
 
     /**

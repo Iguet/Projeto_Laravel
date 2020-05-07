@@ -24,7 +24,14 @@ Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
 
-Route::post('/permissions', 'PermissionsController@permissions')->name('permissions')->middleware('auth');
+Route::group(['prefix' => 'permissions', 'middleware' => 'auth'], function () {
+    
+    Route::post('/', 'PermissionsController@permissions')->name('permissions');
+    Route::get('/edit', 'PermissionsController@edit')->name('editPermissions');
+    Route::post('/update', 'PermissionsController@update')->name('updatePermissions');
+    Route::post('/show/roles', 'PermissionsController@showRoles')->name('roles');
+
+});
 
 Route::group(['prefix' => 'demandas', 'middleware' => 'auth'], function () {
         

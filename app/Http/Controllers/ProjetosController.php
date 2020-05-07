@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Projetos;
 use App\User;
 use App\UsersProjetos;
-use DataTables;
 use Auth;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -17,38 +16,31 @@ class ProjetosController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Projetos $projetos)
     {
-        
-        // dd($result);
 
-        $projetos = Projetos::all();
-
-        // $usersProjetos = UsersProjetos::all();
+        $this->authorize('viewAny', $projetos);
 
         $user = Auth::user();
 
         $id = $user->id;
 
-        $result = DB::table('users_projetos')
-            ->join('projetos', 'users_projetos.projetos_id', '=', 'projetos.id')
-            ->select('projetos.*', 'users_projetos.*')
-            ->where('users_projetos.users_id', '=', $id)
-            ->get();
-        
-        // dd($result);
-        
+        if ($user->hasAnyRole('Admin Projetos', 'Admin')) {
 
-        // $path = base_path();
+            $result = $projetos->all();
+        } else {
 
-
-        // $lista = DB::table('projetos')->select('id', 'name', 'descricao', 'created_at');
+            $result = DB::table('users_projetos')
+                ->join('projetos', 'users_projetos.projetos_id', '=', 'projetos.id')
+                ->select('projetos.*', 'users_projetos.*')
+                ->where('users_projetos.users_id', '=', $id)
+                ->get();
+        }
 
         return view('projetos\index', [
             'projetos' => $result,
-            
+
         ]);
-           
     }
 
     /**
@@ -56,15 +48,16 @@ class ProjetosController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Projetos $projetos)
     {
-        
+
+        $this->authorize('create', $projetos);
+
         $users = User::all();
-        
+
         return view('projetos\cadastro', [
             'users' => $users
         ]);
-
     }
 
     /**
@@ -73,8 +66,10 @@ class ProjetosController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, UsersProjetos $usersProjetos)
+    public function store(Request $request, UsersProjetos $usersProjetos, Projetos $projetos)
     {
+
+        $this->authorize('create', $projetos);
 
         $validatedData = $request->validate([
             'name' => 'unique:projetos|max:50',
@@ -82,29 +77,25 @@ class ProjetosController extends Controller
         ]);
 
 
-        $projetos = new Projetos();
         $usersProjetos = new UsersProjetos();
 
         $projetos->name = $request->nome;
         $projetos->descricao = $request->descricao;
         $projetos->save();
-        
+
         $idProjeto = DB::table('projetos')->where('name', $request->nome)->value('id');
 
-        if($request->has('id')){
-            
+        if ($request->has('id')) {
+
             foreach ($request->id as $id) {
 
                 DB::table('users_projetos')->insert(
-                    [ 'users_id' => $id, 'projetos_id' => $idProjeto, 'created_at' => now(), 'updated_at' => now() ]
+                    ['users_id' => $id, 'projetos_id' => $idProjeto, 'created_at' => now(), 'updated_at' => now()]
                 );
-
             }
-
         }
 
         return redirect()->route('listaProjetos');
-
     }
 
     /**
@@ -115,7 +106,6 @@ class ProjetosController extends Controller
      */
     public function show(Projetos $projetos)
     {
-
     }
 
     /**
@@ -126,62 +116,57 @@ class ProjetosController extends Controller
      */
     public function edit(Request $request, Projetos $projetos, User $users, $id)
     {
-            
-        
 
-            $result = $projetos->find($id);
+        $this->authorize('update', $projetos);
 
-            $arraytem = [];
-            $arraynaotem = [];
+        $result = $projetos->find($id);
+
+        $arraytem = [];
+        $arraynaotem = [];
 
 
-            $usersProjetos = DB::table('users')
-                ->join('users_projetos', 'users.id', '=', 'users_projetos.users_id')
-                ->select('users.id', 'users.name', 'users.email')
-                ->where('projetos_id', '=', $id)
-                ->get();
-            
-            $dados = $users->all();
+        $usersProjetos = DB::table('users')
+            ->join('users_projetos', 'users.id', '=', 'users_projetos.users_id')
+            ->select('users.id', 'users.name', 'users.email')
+            ->where('projetos_id', '=', $id)
+            ->get();
 
-            $id = DB::table('users')
-                ->select('id')
-                ->get();
+        $dados = $users->all();
 
-            foreach ($dados as $usuarios) {
-                
-                $flag = false;
+        $id = DB::table('users')
+            ->select('id')
+            ->get();
 
-                foreach ($usersProjetos as $UP) {
-                    
-                    if($usuarios->id == $UP->id){
-                        
-                        $arraytem[] = $usuarios;
-                        $flag = true;
+        foreach ($dados as $usuarios) {
 
-                        break;
+            $flag = false;
 
-                    }
+            foreach ($usersProjetos as $UP) {
 
+                if ($usuarios->id == $UP->id) {
+
+                    $arraytem[] = $usuarios;
+                    $flag = true;
+
+                    break;
                 }
-                
-                if($flag == false){
-
-                    $arraynaotem[] = $usuarios;
-
-                }
-
             }
-            
-            
-            return view('projetos\edita', [
-                'projetos' => $result,
-                'users' => $dados,
-                'tem' => $arraytem,
-                'naotem' => $arraynaotem,
-                'id' => $id
 
-            ]);
+            if ($flag == false) {
 
+                $arraynaotem[] = $usuarios;
+            }
+        }
+
+
+        return view('projetos\edita', [
+            'projetos' => $result,
+            'users' => $dados,
+            'tem' => $arraytem,
+            'naotem' => $arraynaotem,
+            'id' => $id
+
+        ]);
     }
 
     /**
@@ -195,8 +180,6 @@ class ProjetosController extends Controller
     {
 
         $this->authorize('update', $projetos);
-        
-        
 
         $validatedData = $request->validate([
             'name' => 'unique:projetos|max:50',
@@ -211,7 +194,7 @@ class ProjetosController extends Controller
         $result->descricao = $request->descricao;
         $result->save();
 
-        if($request->has('id')){
+        if ($request->has('id')) {
 
             $consultaUsersProjetos = DB::table('users')
                 ->select('users.id', 'name', 'email')
@@ -219,27 +202,24 @@ class ProjetosController extends Controller
                 ->where('users_projetos.projetos_id', '=', $id)
                 ->get();
 
-                
-                if($consultaUsersProjetos != ''){
 
-                    DB::table('users_projetos')->where('projetos_id', '=', $id)->delete();
-                
-                    foreach ($request->id as $consulta){
-                        
-                        DB::table('users_projetos')->Insert(
-                            [ 'users_id' => $consulta, 'projetos_id' => $id, 'created_at' => now(), 'updated_at' => now() ]
-                        );
+            if ($consultaUsersProjetos != '') {
 
-                    }
+                DB::table('users_projetos')->where('projetos_id', '=', $id)->delete();
+
+                foreach ($request->id as $consulta) {
+
+                    DB::table('users_projetos')->Insert(
+                        ['users_id' => $consulta, 'projetos_id' => $id, 'created_at' => now(), 'updated_at' => now()]
+                    );
                 }
-                    
+            }
         } else {
 
-            DB::table('users_projetos')->where('projetos_id', '=', $id)->delete();            
+            DB::table('users_projetos')->where('projetos_id', '=', $id)->delete();
         }
 
         return redirect()->route('listaProjetos');
-
     }
 
     /**
@@ -251,42 +231,40 @@ class ProjetosController extends Controller
     public function destroy(Projetos $projetos, UsersProjetos $usersProjetos, $id)
     {
 
+        $this->authorize('delete', $projetos);
+
         $consulta = DB::table('users_projetos')
             ->select('*')
             ->where('projetos_id', $id)
             ->get();
-            
-            // dd($consulta);
+
+        // dd($consulta);
 
         $consultaDemanda = DB::table('demandas')
             ->select('*')
             ->where('projeto_id', $id)
             ->get();
 
-            
-        if ($consultaDemanda->isNotEmpty()){
+
+        if ($consultaDemanda->isNotEmpty()) {
             // dd($consultaDemanda);
 
             DB::table('demandas')
                 ->where('projeto_id', $id)
                 ->delete();
+        }
 
-        }   
-
-        if($consulta->isNotEmpty()){
+        if ($consulta->isNotEmpty()) {
 
             DB::table('users_projetos')
                 ->where('projetos_id', $id)
                 ->delete();
             $projetos->find($id)->delete();
-
         } else {
 
             $projetos->find($id)->delete();
-        
         }
 
         return redirect()->route('listaProjetos');
-
     }
 }

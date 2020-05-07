@@ -2,57 +2,107 @@
 
 @section('content')
     <div class="container">
-        <h2 class="display-4">Editar Demanda</h2>
+        @can('update', App\Demandas::class)
+            <h2 class="display-4">Editar Demanda</h2>
+        @elsecan('view', App\Demandas::class)
+            <h2 class="display-4">Vizualização da Demanda</h2>
+        @endcan
         <div class="container">
             <form class="form-group" id="form"  action=" {{ route('updateDemandas', ['id' => $demandas->id]) }} " method="post" >
                 @method('PUT')
                 @csrf
                 <div>
-                    <label> Projetos </label>
-                    <select class="form-control" id="selectProjeto" name="Projeto">
-                        <option disabled>Selecionar Projetos</option>
-                        @foreach ($projetos as $projetos) 
-                            @if ($projetos->id == $demandas->projeto_id)
-                                <option class="autofocus" selected value="{{ $projetos->id }}">{{ $projetoDemandas->name}}</option>
-                            @else
-                                <option value="{{ $projetos->id }}">{{ $projetos->name }}</option>
-                            @endif
-                        @endforeach
-                    </select>
-                </div>
-                <div>
-                    <label> Usuarios </label>
-                    <select class="form-control" id="select" name="User">
-                        <option disabled selected> Selecionar Encarregado </option>
-                            @foreach ($usersProjetos as $users) 
-                                @if ($users->id == $userDemandas->id)
-                                    <option class="autofocus" selected value="{{ $users->id }}">{{ $users->name}}</option>
+                    <label> Projeto </label>
+                    @can('update', App\Demandas::class)
+                        <select class="form-control" id="selectProjeto" name="Projeto">
+                            <option disabled>Selecionar Projetos</option>
+                            @foreach ($projetos as $projetos) 
+                                @if ($projetos->id == $demandas->projeto_id)
+                                    <option class="autofocus" selected value="{{ $projetos->id }}">{{ $projetoDemandas->name}}</option>
                                 @else
-                                    <option value="{{ $users->id }}">{{ $users->name }}</option>
+                                    <option value="{{ $projetos->id }}">{{ $projetos->name }}</option>
                                 @endif
                             @endforeach
-                    </select>
+                        </select>
+                    @elsecan('view', App\Demandas::class)
+
+                        <input type="text" class="form-control" disabled value=" {{ $projetoDemandas->name}} ">
+
+                    @endcan
+                    
+                </div>
+                <div>
+                    <label> Usuario </label>
+                    @can('update', App\Demandas::class)
+
+                        <select class="form-control" id="select" name="User">
+                            <option disabled selected> Selecionar Encarregado </option>
+                                @foreach ($usersProjetos as $users) 
+                                    @if ($users->id == $userDemandas->id)
+                                        <option class="autofocus" selected value="{{ $users->id }}">{{ $users->name}}</option>
+                                    @else
+                                        <option value="{{ $users->id }}">{{ $users->name }}</option>
+                                    @endif
+                                @endforeach
+                        </select>
+
+                    @elsecan('view', App\Demandas::class)
+
+                        <input type="text" class="form-control" disabled value=" {{ $userDemandas->name}} "></option>
+
+                    @endcan
+                    
                 </div>
                 <div>
                     <label> Titulo </label>
-                    <input class="form-control" type="text" name="titulo" placeholder="Titulo" value="{{ $demandas->titulo }}">
+                    @can('update', App\Demandas::class)
+
+                        <input class="form-control" type="text" name="titulo" placeholder="Titulo" value="{{ $demandas->titulo }}">
+
+                    @elsecan('view', App\Demandas::class)
+
+                        <input class="form-control" disabled type="text" name="titulo" placeholder="Titulo" value="{{ $demandas->titulo }}">
+
+                    @endcan
                 </div>
                 <div>
                     <label> Descrição </label>
-                    <input class="form-control" type="text" name="descricao" placeholder="Descrição" value="{{ $demandas->descricao }}">
+                    @can('update', App\Demandas::class)
+
+                        <input class="form-control" type="text" name="descricao" placeholder="Descrição" value="{{ $demandas->descricao }}">
+                        
+                    @elsecan('view', App\Demandas::class)
+
+                        <input class="form-control" disabled type="text" name="descricao" placeholder="Descrição" value="{{ $demandas->descricao }}">
+
+                    @endcan
                 </div>
                 <div>
                     <label> Estado </label>
-                    <select class="form-control" name="estado" >
-                        <option selected disabled> Selecionar Estado </option>
-                        <option> Nova </option>
-                        <option> Em Progresso </option>
-                        <option> Parada </option>
-                        <option> Finalizada </option>
-                    </select>
-                </div>
-                    <input class="btn btn-inserir btn-default" type="submit" value="Editar" name="editaDemanda" id="editaDemanda">   
-                <div>
+
+                    @can('update', App\Demandas::class)
+
+                        <select class="form-control" name="estado" >
+                            <option selected disabled> Selecionar Estado </option>
+                            <option> Nova </option>
+                            <option> Em Progresso </option>
+                            <option> Parada </option>
+                            <option> Finalizada </option>
+                        </select>
+
+                    @elsecan('view', App\Demandas::class) 
+
+                        <input type="text" class="form-control" disabled value=" {{ $demandas->estado }} ">
+                        
+                    @endcan
+
+                @can('update', App\Demandas::class)
+                    </div>
+
+                        <input class="btn btn-inserir btn-default" type="submit" value="Editar" name="editaDemanda" id="editaDemanda">   
+                    
+                    <div>
+                @endcan
             </form>
                 <br>
                 <h3> Comentarios </h3>
