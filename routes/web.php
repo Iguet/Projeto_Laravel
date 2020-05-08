@@ -33,8 +33,13 @@ Route::group(['prefix' => 'permissions', 'middleware' => 'auth'], function () {
 
 });
 
-Route::group(['prefix' => 'demandas', 'middleware' => 'auth'], function () {
         
+Route::post('/notifications', 'NotificationsController@read')->name('notifications');
+
+
+
+Route::group(['prefix' => 'demandas', 'middleware' => 'auth'], function () {
+    
     Route::get('/', 'DemandasController@index')->name('listaDemandas');
     Route::get('/cadastrar', 'DemandasController@create')->name('formDemandas');
     Route::post('/', 'DemandasController@store')->name('cadastroDemandas');

@@ -6,6 +6,7 @@ use App\Demandas;
 use App\Projetos;
 use App\User;
 use Auth;
+use App\Notifications\NovaDemanda;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
@@ -24,8 +25,12 @@ class DemandasController extends Controller
         $this->authorize('viewAny', $demandas);
 
         $id = Auth::user()->id;
-
+        
         $user = Auth::user();
+        
+        // $notifications = $user->unreadNotifications;
+
+        // dd($data);
 
         if ($user->hasAnyRole('Admin Demandas', 'Admin')){
 
@@ -47,7 +52,7 @@ class DemandasController extends Controller
         }
 
         return view('demandas\index', [
-            'dados' => $dados
+            'dados' => $dados,
         ]);
 
 
@@ -79,19 +84,20 @@ class DemandasController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, Demandas $demandas)
+    public function store(Request $request, User $users, Demandas $demandas, NovaDemanda $notification)
     {   
         
+        
         $this->authorize('create', $demandas);
-
+        
+        // dd($notification);
         $validatedData = $request->validate([
             'Titulo' => ['unique:demandas', 'max:50'],
             'Descricao' => ['required'],
             'Projeto' => ['required', 'numeric'],
             'User' => ['required', 'numeric'],
         ]);
-
-        // dd($validatedData);
+        
 
         $demandas = new Demandas;
         $demandas->titulo = $request->Titulo;
@@ -99,6 +105,9 @@ class DemandasController extends Controller
         $demandas->projeto_id = $request->Projeto;
         $demandas->user_id = $request->User;
         $demandas->save();
+
+        $user = $users->find($request->User);
+        $result = $user->notify($notification);
 
         return redirect()->route('listaDemandas');
     }
@@ -213,7 +222,11 @@ class DemandasController extends Controller
         $this->authorize('delete', $demandas);
         
         $result = $demandas->find($id);
-        // dd($result);
+        
+        $coment = DB::table('comentarios')
+                    ->where('demanda_id', $id)
+                    ->delete();
+
         $result->delete();
         return redirect()->route('listaDemandas');
 

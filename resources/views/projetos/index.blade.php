@@ -21,7 +21,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @hasanyrole('Admin Demandas|Admin')
+                        @hasanyrole('Admin Projetos|Admin')
                             @foreach ($projetos as $projetos)
                                 <tr>
                                     <td> {{ $projetos->name }} </td>

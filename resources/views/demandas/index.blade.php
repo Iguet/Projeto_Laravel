@@ -61,11 +61,12 @@
                 </table>
                 @can('create', App\Demandas::class)
                     
-                    <input id="Nova" type="submit" class="btn" formmethod="GET" formaction=" {{ route('formDemandas') }} " value="Cadastrar">
+                    <input type="submit" class="btn" formmethod="GET" formaction=" {{ route('formDemandas') }} " value="Cadastrar">
                     
                 @endcan
             </form>
         </div>
     </div>   
 @endsection
+
     

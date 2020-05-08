@@ -153,13 +153,8 @@
                     dataType: 'json'
 
                 }).done(function(data) {
-
-                    // console.log(data);
                     
                         for(var i = 0; data.id.length > i; i++){
-
-                            // console.log(data.name[i]);
-
 
                             $('#select').append('<option value="'+data.id[i].id+'">'+data.name[i].name+'</option>');
 
@@ -177,6 +172,8 @@
 
             var idDemanda = " {!! $demandas->id !!} "
 
+            console.log(idDemanda);
+
             $.ajax({
 
                 url: " {{ route('listaComentarios') }} ",
@@ -189,7 +186,6 @@
                 },
                 dataType: 'json',
                 success: function (data) {
-                    // console.log(data);
 
                     for(var i = 0; i < data.dados.length; i++){
 
@@ -209,10 +205,8 @@
 
             $('#formComentario').submit(function(e) {
 
-                // alert("FODASE");
                 e.preventDefault();
                 $('#comentario').empty();
-                // $('#select').empty();
 
                 $.ajax({
 

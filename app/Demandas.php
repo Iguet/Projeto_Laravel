@@ -3,10 +3,13 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Notifications\Notifiable;
 
 class Demandas extends Model
 {
     
+    use Notifiable;
+
     protected $dates = [
         'created_at',
         'updated_at'

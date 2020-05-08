@@ -179,6 +179,8 @@ class ProjetosController extends Controller
     public function update(Request $request, Projetos $projetos, UsersProjetos $usersProjetos, $id)
     {
 
+        DB::beginTransaction();
+        
         $this->authorize('update', $projetos);
 
         $validatedData = $request->validate([
@@ -218,6 +220,8 @@ class ProjetosController extends Controller
 
             DB::table('users_projetos')->where('projetos_id', '=', $id)->delete();
         }
+
+        DB::commit();
 
         return redirect()->route('listaProjetos');
     }
