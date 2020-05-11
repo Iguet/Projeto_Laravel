@@ -193,7 +193,7 @@ class DemandasController extends Controller
      * @param  \App\Demandas  $demandas
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Demandas $demandas, $id)
+    public function update(Request $request, Demandas $demandas, $id, User $users, NovaDemanda $notification)
     {
 
         $this->authorize('update', $demandas);
@@ -205,6 +205,9 @@ class DemandasController extends Controller
         $dados->projeto_id = $request->Projeto;
         $dados->user_id = $request->User;
         $dados->save();
+
+        $user = $users->find($request->User);
+        $result = $user->notify($notification);
 
         return redirect()->route('listaDemandas');
 

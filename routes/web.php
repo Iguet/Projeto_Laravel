@@ -11,11 +11,6 @@
 |
 */
 
-// Route::group(], function () {
-//     //
-// });
-
-
 Route::get('/', function () {
     return view('welcome');
 });
@@ -67,7 +62,3 @@ Route::group(['prefix' => 'comentarios', 'middleware' => 'auth'], function () {
     Route::post('/adicionar', 'ComentariosController@store')->name('storeComentarios');
 
 });
-
-// Route::get('profile', function () {
-//     // Only authenticated users may enter...
-// })

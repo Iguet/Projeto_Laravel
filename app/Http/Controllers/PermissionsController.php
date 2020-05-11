@@ -37,7 +37,6 @@ class PermissionsController extends Controller
 
         $all_roles_in_database = Role::all();
 
-        // dd($all_roles_in_database);
         return view('permissions\index', [
             'roles' => $all_roles_in_database,
             'users' => $data
@@ -76,13 +75,6 @@ class PermissionsController extends Controller
                                             ->get();
         }
 
-
-
-
-       
-
-        // echo json_encode($roles);
-
         echo json_encode($dados);
 
     }
@@ -90,10 +82,6 @@ class PermissionsController extends Controller
     public function update(Request $request, User $users)
     {
         
-        
-        // $user->syncRoles($request->role);
-
-        // $user = $request->user;
         $user = $users->find($request->user);
 
         $var = $user->getAllPermissions();
@@ -105,8 +93,6 @@ class PermissionsController extends Controller
 
         }
 
-        // die('ADAFF');
-
         foreach ($request->permissoes as $permissao){
 
             $user->givePermissionTo($permissao);
@@ -115,36 +101,8 @@ class PermissionsController extends Controller
         
         $user->syncRoles($request->role);
 
-        // die('auqi');
-
         return redirect()->route('home');
 
     }
 
 }
-
-// Role::create(['name' => 'Admin Projetos']);
-        // Role::create(['name' => 'Admin Demandas']);
-        // Role::create(['name' => 'Admin']);
-        // Role::create(['name' => 'User Padrao']);
-        // Permission::create(['name' => 'Criar Projetos']);
-        // Permission::create(['name' => 'Criar Demandas']);
-        // Permission::create(['name' => 'Editar Projetos']);
-        // Permission::create(['name' => 'Editar Demandas']);
-        // Permission::create(['name' => 'Deletar Projetos']);
-        // Permission::create(['name' => 'Deletar Demandas']);
-        // Permission::create(['name' => 'Vizualizar Projetos']);
-        // Permission::create(['name' => 'Vizualizar Demandas']);
-
-        // $role = Role::findById(2);
-
-        // $permission = array();
-
-        // $permission = Permission::all();
-        // $permission[] = Permission::findById(4);
-        // $permission[] = Permission::findById(7);
-        // $permission[] = Permission::findById(8);
-        // $permission[] = Permission::findById(2);
-        // $permission = Permission::findById(1);
-
-        // $role->givePermissionTo($permission);
