@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('content')  
+@section('content')
   <div class="container">
     <h2 class="display-4">Cadastro de Demandas</h2><br>
     <div class="container">
@@ -9,24 +9,36 @@
 		<div class="form-group">
 			<select class="form-control listaProjeto" id="selectProjeto" name="Projeto">
 			<option selected disabled>Projeto</option>
-				@foreach ($projetos as $projetos) 
+				@foreach ($projetos as $projetos)
 					<option value="{{ $projetos->id }}">{{ $projetos->name }}</option>
 				@endforeach
 			</select>
+            @error('Projeto')
+                <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
 		</div>
 		<div class="form-group">
 			<select class="form-control" id="select" name="User">
 				<option selected disabled>Encarregado</option>
-				@foreach ($users as $user) 
+				@foreach ($users as $user)
 					<option value="{{ $user->id }}">{{ $user->name }}</option>
 				@endforeach
 			</select>
+            @error('User')
+                <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
 		</div>
 		<div class="form-group">
 			<input class="form-control" type="text" name="Titulo" id="Titulo" placeholder="Titulo">
+            @error('Titulo')
+                <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
 		</div>
 		<div class="form-group">
 			<textarea class="form-control" type="text" name="Descricao" id="Descricao" placeholder="Descrição" rows="1"></textarea>
+            @error('Descricao')
+                <div class="alert alert-danger">{{ $message }}</div>
+            @enderror
 		</div>
 		<div>
 			<input class="btn btn-inserir btn-default" type="submit" value="Cadastrar Demanda" name="Demanda" id="CriarDemanda">
@@ -40,9 +52,9 @@
 @section('scripts')
 
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.js" defer></script>
-    
+
     <script type="text/javascript">
-    
+
         jQuery(document).ready(function(){
 
             var token = '{{csrf_token()}}';
@@ -66,7 +78,7 @@
                 }).done(function(data) {
 
                     // console.log(data);
-                    
+
 					for(var i = 0; data.id.length > i; i++){
 
 						// console.log(data.name[i]);
@@ -77,7 +89,7 @@
 					}
 
 				});
-                    
+
                     // complete: function(data){
                     //     console.log(data);
                     // }
@@ -88,7 +100,7 @@
 
 		});
 
-    
+
     </script>
 
 @endsection

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Demandas;
+use App\Http\Requests\DemandasRequest;
 use App\Projetos;
 use App\User;
 use Auth;
@@ -85,20 +86,11 @@ class DemandasController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, User $users, Demandas $demandas, NovaDemanda $notification)
+    public function store(DemandasRequest $request, User $users, Demandas $demandas, NovaDemanda $notification)
     {
 
 
         $this->authorize('create', $demandas);
-
-        // dd($notification);
-        $validatedData = $request->validate([
-            'Titulo' => ['unique:demandas', 'max:50'],
-            'Descricao' => ['required'],
-            'Projeto' => ['required', 'numeric'],
-            'User' => ['required', 'numeric'],
-        ]);
-
 
         $demandas = new Demandas;
         $demandas->titulo = $request->Titulo;
@@ -195,15 +187,15 @@ class DemandasController extends Controller
      * @param  \App\Demandas  $demandas
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Demandas $demandas, $id, User $users, NovaDemanda $notification)
+    public function update(DemandasRequest $request, Demandas $demandas, $id, User $users, NovaDemanda $notification)
     {
 
         $this->authorize('update', $demandas);
 
         $dados = $demandas->find($id);
-        $dados->titulo = $request->titulo;
-        $dados->descricao = $request->descricao;
-        $dados->estado = $request->estado;
+        $dados->titulo = $request->Titulo;
+        $dados->descricao = $request->Descricao;
+        $dados->estado = $request->Estado;
         $dados->projeto_id = $request->Projeto;
         $dados->user_id = $request->User;
         $dados->save();

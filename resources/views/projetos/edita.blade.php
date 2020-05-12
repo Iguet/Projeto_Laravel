@@ -5,14 +5,19 @@
         <div class="container">
             <form class="form-group" action=" {{ route('updateProjetos', ['id' => $projetos->id], ['idUser' => $id]) }} " method="post">
                 @csrf
-                {{-- {{ $path }} --}}
                 @method('PUT')
                 <div class="form-group">
                     {{-- <input type="hidden" name="idProjetos" value=" {{ $projetos->id }} "> --}}
-                    <input class="form-control" type="text" name="nome" id="NomeEditaProjeto" placeholder="Nome" value="{{ $projetos->name }}">
+                    <input class="form-control" type="text" name="name" id="NomeEditaProjeto" placeholder="Nome" value="{{ $projetos->name }}">
+                    @error('name')
+                        <div class="alert alert-danger">{{ $message }}</div>
+                    @enderror
                 </div>
                 <div class="form-group">
                     <textarea class="form-control" type="text" name="descricao" id="DescricaoEditaProjeto" placeholder="Descricao">{{ $projetos->descricao }}</textarea>
+                    @error('descricao')
+                        <div class="alert alert-danger">{{ $message }}</div>
+                    @enderror
                 </div>
 
                 <table class="table table-striped table-bordered" id="tabela">
@@ -34,7 +39,7 @@
                                 <td> {{ $user->id }} </td>
                                 <td> {{ $user->name }} </td>
                                 <td> {{ $user->email }} </td>
-                            </tr>    
+                            </tr>
 
                         @endforeach
                         @foreach ($naotem as $verifica)
@@ -44,7 +49,7 @@
                             <td> {{ $verifica->id }} </td>
                             <td> {{ $verifica->name }} </td>
                             <td> {{ $verifica->email }} </td>
-                        </tr>  
+                        </tr>
 
                         @endforeach
 
@@ -58,7 +63,7 @@
 @endsection
 
 @section('scripts')
-    
+
 
     <script type="text/javascript">
 

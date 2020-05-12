@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ProjetosRequest;
 use App\Projetos;
 use App\User;
 use App\UsersProjetos;
@@ -66,24 +67,18 @@ class ProjetosController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, UsersProjetos $usersProjetos, Projetos $projetos)
+    public function store(ProjetosRequest $request, UsersProjetos $usersProjetos, Projetos $projetos)
     {
 
         $this->authorize('create', $projetos);
 
-        $validatedData = $request->validate([
-            'name' => 'unique:projetos|max:50',
-            'descricao' => 'required',
-        ]);
-
-
         $usersProjetos = new UsersProjetos();
 
-        $projetos->name = $request->nome;
+        $projetos->name = $request->name;
         $projetos->descricao = $request->descricao;
         $projetos->save();
 
-        $idProjeto = DB::table('projetos')->where('name', $request->nome)->value('id');
+        $idProjeto = DB::table('projetos')->where('name', $request->name)->value('id');
 
         if ($request->has('id')) {
 
@@ -176,23 +171,18 @@ class ProjetosController extends Controller
      * @param  \App\Projetos  $projetos
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Projetos $projetos, UsersProjetos $usersProjetos, $id)
+    public function update(ProjetosRequest $request, Projetos $projetos, UsersProjetos $usersProjetos, $id)
     {
 
         DB::beginTransaction();
-        
-        $this->authorize('update', $projetos);
 
-        $validatedData = $request->validate([
-            'name' => 'unique:projetos|max:50',
-            'descricao' => 'required',
-        ]);
+        $this->authorize('update', $projetos);
 
         $usersProjetos = new UsersProjetos;
 
         $result = $projetos->find($id);
 
-        $result->name = $request->nome;
+        $result->name = $request->name;
         $result->descricao = $request->descricao;
         $result->save();
 

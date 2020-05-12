@@ -6,10 +6,16 @@
         <div class="container">
             <form class="form-group CadastroProjeto" action="{{ route('cadastroProjetos') }}" method="post">
                 <div class="form-group">
-                    <input class="form-control" type="text" name="nome" placeholder="Nome">
+                    <input class="form-control" type="text" name="name" placeholder="Nome">
+                    @error('name')
+                        <div class="alert alert-danger">{{ $message }}</div>
+                    @enderror
                 </div>
                 <div class="form-group">
                     <textarea class="form-control" type="text" name="descricao" placeholder="Descricao"></textarea>
+                    @error('descricao')
+                        <div class="alert alert-danger">{{ $message }}</div>
+                    @enderror
                 </div>
                 <table class="display table table-striped table-bordered tabela" style="width:100%">
                 <thead>
