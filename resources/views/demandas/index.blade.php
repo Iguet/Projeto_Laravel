@@ -21,42 +21,26 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @hasanyrole('Admin Demandas|Admin')
-
-                            @foreach ($dados as $demandas)
-                            <tr>
-
-                                {{-- @method('DELETE') --}}
-                                <td> {{ $demandas->nomeProjeto}} </td>
-                                <td> {{ $demandas->name }} </td>
-                                <td> {{ $demandas->titulo }} </td>
-                                <td> {{ $demandas->descricao }} </td>
-                                <td> {{ $demandas->estado }} </td>
-                                <td> {{ $demandas->created_at }} </td>
-                                <td> 
-
-                                    <input type="submit" class="btn" formaction=" {{ route('destroyDemandas', ['id' => $demandas->id]) }} " formmethod="POST" value="Deletar">
-                                    <input type="submit" class="btn" formaction=" {{ route('editaDemandas', ['id' => $demandas->id, 'idProjeto' => $demandas->idProjeto]) }} " formmethod="GET" value="Editar"> 
-
-                                </td>
-                            </tr>
-                        @endforeach
-                    @else
-
                         @foreach ($dados as $demandas)
                             <tr>
-
-                                {{-- @method('DELETE') --}}
                                 <td> {{ $demandas->nomeProjeto}} </td>
                                 <td> {{ $demandas->name }} </td>
                                 <td> {{ $demandas->titulo }} </td>
                                 <td> {{ $demandas->descricao }} </td>
                                 <td> {{ $demandas->estado }} </td>
                                 <td> {{ $demandas->created_at }} </td>
-                                <td><input type="submit" class="btn" formaction=" {{ route('editaDemandas', ['id' => $demandas->id, 'idProjeto' => $demandas->idProjeto]) }} " formmethod="GET" value="Vizualizar"></td> 
+                                @hasanyrole('Admin Demandas|Admin')
+                                    <td> 
+
+                                        <input type="submit" class="btn" formaction=" {{ route('destroyDemandas', ['id' => $demandas->id]) }} " formmethod="POST" value="Deletar">
+                                        <input type="submit" class="btn" formaction=" {{ route('editaDemandas', ['id' => $demandas->id, 'idProjeto' => $demandas->idProjeto]) }} " formmethod="GET" value="Editar"> 
+
+                                    </td>
+                                @else
+                                    <td><input type="submit" class="btn" formaction=" {{ route('editaDemandas', ['id' => $demandas->id, 'idProjeto' => $demandas->idProjeto]) }} " formmethod="GET" value="Vizualizar"></td> 
+                                @endhasanyrole
                             </tr>
                         @endforeach
-                    @endhasanyrole
                     </tbody>
                 </table>
                 @can('create', App\Demandas::class)

@@ -11,6 +11,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
+use App\Events\NotificationEvent;
 
 class DemandasController extends Controller
 {
@@ -25,9 +26,9 @@ class DemandasController extends Controller
         $this->authorize('viewAny', $demandas);
 
         $id = Auth::user()->id;
-        
+
         $user = Auth::user();
-        
+
         // $notifications = $user->unreadNotifications;
 
         // dd($data);
@@ -48,7 +49,7 @@ class DemandasController extends Controller
                         ->select('projetos.name as nomeProjeto', 'projetos.id as idProjeto', 'users.name', 'demandas.id', 'demandas.titulo', 'demandas.descricao', 'demandas.estado', 'demandas.created_at')
                         ->where('demandas.user_id', '=', $id)
                         ->get();
-    
+
         }
 
         return view('demandas\index', [
@@ -67,10 +68,10 @@ class DemandasController extends Controller
     {
 
         $this->authorize('create', $demandas);
-        
+
         $projetos = Projetos::all();
         $users = User::all();
-       
+
         return view('demandas\cadastro', [
             'projetos' => $projetos,
             'users' => $users
@@ -85,11 +86,11 @@ class DemandasController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function store(Request $request, User $users, Demandas $demandas, NovaDemanda $notification)
-    {   
-        
-        
+    {
+
+
         $this->authorize('create', $demandas);
-        
+
         // dd($notification);
         $validatedData = $request->validate([
             'Titulo' => ['unique:demandas', 'max:50'],
@@ -97,7 +98,7 @@ class DemandasController extends Controller
             'Projeto' => ['required', 'numeric'],
             'User' => ['required', 'numeric'],
         ]);
-        
+
 
         $demandas = new Demandas;
         $demandas->titulo = $request->Titulo;
@@ -106,8 +107,9 @@ class DemandasController extends Controller
         $demandas->user_id = $request->User;
         $demandas->save();
 
-        $user = $users->find($request->User);
-        $result = $user->notify($notification);
+        $user = $request->User;
+
+        event(new NotificationEvent($user));
 
         return redirect()->route('listaDemandas');
     }
@@ -137,7 +139,7 @@ class DemandasController extends Controller
             ->where('users_projetos.projetos_id', '=', $idProjeto)
             ->get();
 
-        echo json_encode($result);   
+        echo json_encode($result);
 
     }
 
@@ -206,8 +208,9 @@ class DemandasController extends Controller
         $dados->user_id = $request->User;
         $dados->save();
 
-        $user = $users->find($request->User);
-        $result = $user->notify($notification);
+        $user = $request->User;
+
+        event(new NotificationEvent($user));
 
         return redirect()->route('listaDemandas');
 
@@ -223,9 +226,9 @@ class DemandasController extends Controller
     {
 
         $this->authorize('delete', $demandas);
-        
+
         $result = $demandas->find($id);
-        
+
         $coment = DB::table('comentarios')
                     ->where('demanda_id', $id)
                     ->delete();

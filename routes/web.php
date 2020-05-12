@@ -20,7 +20,7 @@ Auth::routes();
 Route::get('/home', 'HomeController@index')->name('home');
 
 Route::group(['prefix' => 'permissions', 'middleware' => 'auth'], function () {
-    
+
     Route::post('/', 'PermissionsController@permissions')->name('permissions');
     Route::get('/edit', 'PermissionsController@edit')->name('editPermissions');
     Route::post('/update', 'PermissionsController@update')->name('updatePermissions');
@@ -28,13 +28,10 @@ Route::group(['prefix' => 'permissions', 'middleware' => 'auth'], function () {
 
 });
 
-        
 Route::post('/notifications', 'NotificationsController@read')->name('notifications');
 
-
-
 Route::group(['prefix' => 'demandas', 'middleware' => 'auth'], function () {
-    
+
     Route::get('/', 'DemandasController@index')->name('listaDemandas');
     Route::get('/cadastrar', 'DemandasController@create')->name('formDemandas');
     Route::post('/', 'DemandasController@store')->name('cadastroDemandas');
@@ -46,7 +43,7 @@ Route::group(['prefix' => 'demandas', 'middleware' => 'auth'], function () {
 });
 
 Route::group(['prefix' => 'projetos', 'middleware' => 'auth'], function () {
-    
+
     Route::get('/', 'ProjetosController@index')->name('listaProjetos');
     Route::get('/cadastrar', 'ProjetosController@create')->name('formProjetos');
     Route::post('/', 'ProjetosController@store')->name('cadastroProjetos');
@@ -57,8 +54,25 @@ Route::group(['prefix' => 'projetos', 'middleware' => 'auth'], function () {
 });
 
 Route::group(['prefix' => 'comentarios', 'middleware' => 'auth'], function () {
-    
+
     Route::post('/', 'ComentariosController@index')->name('listaComentarios');
     Route::post('/adicionar', 'ComentariosController@store')->name('storeComentarios');
 
 });
+
+Route::group(['prefix' => 'profile', 'middleware' => 'auth'], function () {
+
+    Route::get('/', 'ProfileController@edit')->name('listProfile');
+    Route::put('/edit/{id}', 'ProfileController@update')->name('editProfile');
+
+});
+
+//Route::get('/import', 'ProfileController@create')->name('importJob');
+
+Route::get('import', function () {
+
+    \App\Jobs\ImportJob::dispatch();
+
+    return redirect()->route('home');
+
+})->name('importJob');

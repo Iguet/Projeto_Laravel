@@ -17,16 +17,16 @@
     <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.16/datatables.min.js" defer></script>
     <script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.10.16/js/dataTables.bootstrap4.min.js" defer></script>
     <script type="text/javascript" src="https://code.jquery.com/jquery-3.5.1.min.js" defer></script>
-    
+
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.gstatic.com">
     <link href="https://fonts.googleapis.com/css?family=Nunito" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/v/dt/dt-1.10.16/datatables.min.css"/>
-    
+
     <!-- Styles -->
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.0.0/css/bootstrap.css">
-    
+
     {{-- <link rel="stylesheet" href="https://cdn.datatables.net/1.10.16/css/dataTables.bootstrap4.min.css"> --}}
 
     <style>
@@ -41,14 +41,14 @@
 
             padding-top: 0px;
 
-        }    
+        }
 
         .form-check-inline {
 
             padding-right: 10px;
             padding-left: 10px;
 
-        }    
+        }
 
     </style>
 
@@ -72,26 +72,26 @@
                 success: function(data) {
 
                     console.log(data);
-                
+
                 },
-            
+
                 complete: function(data){
                     console.log(data);
 
                 }
 
-           
+
             });
 
         });
 
     });
 
-    
+
 </script>
 
     @yield('scripts')
-    
+
 </head>
 <body>
     <div id="app">
@@ -108,7 +108,7 @@
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav mr-auto">
                         @guest
-                        
+
                         @else
 
                             <li class="nav-item">
@@ -121,7 +121,7 @@
                                             @foreach (auth::user()->unreadNotifications as $item)
 
                                                 <a href=" {{ route('listaDemandas') }} " class="dropdown-item" value = "{{ $item->data['message'] }}"> {{ $item->data['message'] }} </a>
-                                                
+
                                             @endforeach
                                         </div>
                                     @else
@@ -129,12 +129,12 @@
                                             <img src=" {{ asset('img/bell.svg') }} " title="Bootstrap">
                                         </button>
                                     @endif
-                              
+
                                 </div>
                             </li>
 
                         @endguest
-                        
+
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -153,6 +153,9 @@
                             <li class="nav-item">
                                 <a class="nav-link" href="{{ route('listaDemandas') }}">{{ __('Demandas') }}</a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" href="{{ route('importJob') }}">{{ __('Importar') }}</a>
+                            </li>
                             <li>
                                 <a class="nav-link" href="{{ route('listaProjetos') }}">{{ __('Projetos') }}</a>
                             </li>
@@ -163,10 +166,19 @@
                             @endhasrole
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
-                                    {{ Auth::user()->name }} <span class="caret"></span>
+{{--                                    {{ Auth::user()->name }} <span class="caret"></span>--}}
+                                    @if(Auth::user()->image)
+                                        <img src=" {{ asset('storage/' .Auth::user()->image) }} " title="Bootstrap" width="30" height="30">
+                                    @else
+                                        <img src=" {{ asset('img/person.svg') }} " title="Bootstrap">
+                                    @endif
                                 </a>
 
                                 <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
+                                    <a class="dropdown-item" href=" {{ route('listProfile') }} ">
+
+                                        Edit
+                                    </a>
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
