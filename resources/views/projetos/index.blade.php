@@ -1,11 +1,11 @@
 @extends('layouts.app')
 
-@section('content')  
+@section('content')
     <div class="container">
         <div class="container">
             <h2>Projetos</h2>
             <form>
-                
+
                 @csrf
                 <table class="table table-striped table-bordered tabela">
                     <thead>
@@ -16,7 +16,7 @@
                             @canany(['delete', 'update'], App\Projetos::class)
 
                                 <th></th>
-                                
+
                             @endcanany
                         </tr>
                     </thead>
@@ -27,10 +27,10 @@
                                     <td> {{ $projetos->name }} </td>
                                     <td> {{ $projetos->descricao }} </td>
                                     <td> {{ $projetos->created_at }} </td>
-                                    <td> 
-                                        <input type="submit" class="btn" formaction=" {{ route('destroyProjetos', ['id' => $projetos->id]) }} " formmethod="POST" value="Deletar"> 
-                                        <input type="submit" class="btn" formaction=" {{ route('editaProjetos', ['id' => $projetos->id]) }} " formmethod="GET" value="Editar"> 
-                                    </td>  
+                                    <td>
+                                        <input type="submit" class="btn" formaction=" {{ route('destroyProjetos', ['id' => $projetos->id]) }} " formmethod="POST" value="Deletar">
+                                        <input type="submit" class="btn" formaction=" {{ route('editaProjetos', ['id' => $projetos->id]) }} " formmethod="GET" value="Editar">
+                                    </td>
                                 </tr>
                             @endforeach
                         @else
@@ -47,12 +47,12 @@
                     </tbody>
                 </table>
                 @can('create', App\Projetos::class)
-                    
+
                     <input type="submit" class="btn btn-default btn-footer"  value="Cadastrar" formaction=" {{ route('formProjetos') }} ">
 
                 @endcan
             </form>
         </div>
     </div>
-    
+
 @endsection

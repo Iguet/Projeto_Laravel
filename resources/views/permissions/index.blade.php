@@ -72,10 +72,10 @@
                     </div>
                 </div>
                 <div id="inputs" ></div>
-                        
+
                 <div>
 
-                    <input class="btn btn-default" type="submit" value="Editar" id="editaPermission">   
+                    <input class="btn btn-default" type="submit" value="Editar" id="editaPermission">
 
                 </div>
             </form>
@@ -86,14 +86,14 @@
 @section('scripts')
 
     <script type="text/javascript">
-    
+
         jQuery(document).ready(function(){
 
-            var token = '{{csrf_token()}}'; 
+            var token = '{{csrf_token()}}';
 
             $(document).on('blur', '#user', function(){
 
-                
+
                 $.ajax({
 
                     url: " {{ route('roles') }} ",
@@ -127,10 +127,10 @@
                                     $("[name='"+data.permissions[j].name+"']").val(data.permissions[j].name);
                                     $("#inputs").append('<input type="hidden" name = "permissoes[]" value = "'+data.permissions[j].name+'">');
 
-                                } 
+                                }
 
                             }
-                            
+
                         }
 
                     },
@@ -178,10 +178,10 @@
 
 
 
-                                } 
+                                }
 
                             }
-                            
+
                         }
 
                     },
@@ -197,7 +197,7 @@
             });
 
         });
-    
+
     </script>
-    
+
 @endsection

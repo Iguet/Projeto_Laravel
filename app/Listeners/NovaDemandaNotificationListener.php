@@ -2,11 +2,14 @@
 
 namespace App\Listeners;
 
+use App\Events\NotificationEvent;
 use App\Events\NotificationReadEvent;
+use App\Notifications\NovaDemanda;
+use App\User;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 
-class LerDemandaNotificationListener
+class NovaDemandaNotificationListener
 {
     /**
      * Create the event listener.
@@ -25,10 +28,14 @@ class LerDemandaNotificationListener
      * @return void
      * @throws \Exception
      */
-    public function handle(NotificationReadEvent $event)
+    public function handle(NotificationEvent $event)
     {
 
-        dd($event->user->readNotifications);
+        $user = User::find($event->user);
+
+        $notification = new NovaDemanda();
+
+        $user->notify($notification);
 
     }
 }
