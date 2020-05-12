@@ -8,17 +8,17 @@
                 <div class="form-group">
                     <input class="form-control" type="text" name="name" placeholder="Nome">
                     @error('name')
-                        <div class="alert alert-danger">{{ $message }}</div>
+                    <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
                 </div>
                 <div class="form-group">
                     <textarea class="form-control" type="text" name="descricao" placeholder="Descricao"></textarea>
                     @error('descricao')
-                        <div class="alert alert-danger">{{ $message }}</div>
+                    <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
                 </div>
                 <table class="display table table-striped table-bordered tabela" style="width:100%">
-                <thead>
+                    <thead>
                     <h3> Pessoas </h3>
                     <tr>
                         <th></th>
@@ -26,18 +26,18 @@
                         <th>Nome</th>
                         <th>Email</th>
                     </tr>
-                </thead>
-                <tbody>
+                    </thead>
+                    <tbody>
                     @foreach ($users as $user)
                         <tr>
                             @csrf
-                            <td> <input type="checkbox" name="id[]" value=" {{ $user->id }} "></td>
+                            <td><input type="checkbox" name="id[]" value=" {{ $user->id }} "></td>
                             <td> {{ $user->id }} </td>
                             <td> {{ $user->name }} </td>
                             <td> {{ $user->email }} </td>
                         </tr>
                     @endforeach
-                </tbody>
+                    </tbody>
                 </table>
                 <input class="btn btn-inserir btn-default" type="submit" value="Cadastrar Projeto" name="Projeto">
             </form>

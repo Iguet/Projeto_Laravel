@@ -8,7 +8,8 @@
             <h2 class="display-4">Vizualização da Demanda</h2>
         @endcan
         <div class="container">
-            <form class="form-group" id="form"  action=" {{ route('updateDemandas', ['id' => $demandas->id]) }} " method="post" >
+            <form class="form-group" id="form" action=" {{ route('updateDemandas', ['id' => $demandas->id]) }} "
+                  method="post">
                 @method('PUT')
                 @csrf
                 <div>
@@ -18,14 +19,15 @@
                             <option disabled>Selecionar Projetos</option>
                             @foreach ($projetos as $projetos)
                                 @if ($projetos->id == $demandas->projeto_id)
-                                    <option class="autofocus" selected value="{{ $projetos->id }}">{{ $projetoDemandas->name}}</option>
+                                    <option class="autofocus" selected
+                                            value="{{ $projetos->id }}">{{ $projetoDemandas->name}}</option>
                                 @else
                                     <option value="{{ $projetos->id }}">{{ $projetos->name }}</option>
                                 @endif
                             @endforeach
                         </select>
                         @error('Projeto')
-                            <div class="alert alert-danger">{{ $message }}</div>
+                        <div class="alert alert-danger">{{ $message }}</div>
                         @enderror
                     @elsecan('view', App\Demandas::class)
 
@@ -39,17 +41,18 @@
                     @can('update', App\Demandas::class)
 
                         <select class="form-control" id="select" name="User">
-                            <option disabled selected> Selecionar Encarregado </option>
-                                @foreach ($usersProjetos as $users)
-                                    @if ($users->id == $userDemandas->id)
-                                        <option class="autofocus" selected value="{{ $users->id }}">{{ $users->name}}</option>
-                                    @else
-                                        <option value="{{ $users->id }}">{{ $users->name }}</option>
-                                    @endif
-                                @endforeach
+                            <option disabled selected> Selecionar Encarregado</option>
+                            @foreach ($usersProjetos as $users)
+                                @if ($users->id == $userDemandas->id)
+                                    <option class="autofocus" selected
+                                            value="{{ $users->id }}">{{ $users->name}}</option>
+                                @else
+                                    <option value="{{ $users->id }}">{{ $users->name }}</option>
+                                @endif
+                            @endforeach
                         </select>
                         @error('User')
-                            <div class="alert alert-danger">{{ $message }}</div>
+                        <div class="alert alert-danger">{{ $message }}</div>
                         @enderror
 
                     @elsecan('view', App\Demandas::class)
@@ -63,14 +66,16 @@
                     <label> Titulo </label>
                     @can('update', App\Demandas::class)
 
-                        <input class="form-control" type="text" name="Titulo" placeholder="Titulo" value="{{ $demandas->titulo }}">
+                        <input class="form-control" type="text" name="Titulo" placeholder="Titulo"
+                               value="{{ $demandas->titulo }}">
                         @error('Titulo')
-                            <div class="alert alert-danger">{{ $message }}</div>
+                        <div class="alert alert-danger">{{ $message }}</div>
                         @enderror
 
                     @elsecan('view', App\Demandas::class)
 
-                        <input class="form-control" disabled type="text" name="titulo" placeholder="Titulo" value="{{ $demandas->titulo }}">
+                        <input class="form-control" disabled type="text" name="titulo" placeholder="Titulo"
+                               value="{{ $demandas->titulo }}">
 
                     @endcan
                 </div>
@@ -78,14 +83,16 @@
                     <label> Descrição </label>
                     @can('update', App\Demandas::class)
 
-                        <input class="form-control" type="text" name="Descricao" placeholder="Descrição" value="{{ $demandas->descricao }}">
+                        <input class="form-control" type="text" name="Descricao" placeholder="Descrição"
+                               value="{{ $demandas->descricao }}">
                         @error('Descricao')
-                            <div class="alert alert-danger">{{ $message }}</div>
+                        <div class="alert alert-danger">{{ $message }}</div>
                         @enderror
 
                     @elsecan('view', App\Demandas::class)
 
-                        <input class="form-control" disabled type="text" name="descricao" placeholder="Descrição" value="{{ $demandas->descricao }}">
+                        <input class="form-control" disabled type="text" name="descricao" placeholder="Descrição"
+                               value="{{ $demandas->descricao }}">
 
                     @endcan
                 </div>
@@ -94,15 +101,15 @@
 
                     @can('update', App\Demandas::class)
 
-                        <select class="form-control" name="Estado" >
-                            <option selected disabled> Selecionar Estado </option>
-                            <option> Nova </option>
-                            <option> Em Progresso </option>
-                            <option> Parada </option>
-                            <option> Finalizada </option>
+                        <select class="form-control" name="Estado">
+                            <option selected disabled> Selecionar Estado</option>
+                            <option> Nova</option>
+                            <option> Em Progresso</option>
+                            <option> Parada</option>
+                            <option> Finalizada</option>
                         </select>
                         @error('Estado')
-                            <div class="alert alert-danger">{{ $message }}</div>
+                        <div class="alert alert-danger">{{ $message }}</div>
                         @enderror
 
                     @elsecan('view', App\Demandas::class)
@@ -111,33 +118,35 @@
 
                     @endcan
 
-                @can('update', App\Demandas::class)
-                    </div>
+                    @can('update', App\Demandas::class)
+                </div>
 
-                        <input class="btn btn-inserir btn-default" type="submit" value="Editar" name="editaDemanda" id="editaDemanda">
+                <input class="btn btn-inserir btn-default" type="submit" value="Editar" name="editaDemanda"
+                       id="editaDemanda">
 
-                    <div>
+                <div>
                 @endcan
             </form>
-                <br>
-                <h3> Comentarios </h3>
-                <br>
-                <form id="formComentario">
-                    @csrf
-                    <div>
-                        <input class="form-control" type="text" name="comentario" id="comentario" placeholder="Escreva seu comentario">
-                    </div>
-                    <div>
-                        <input class="btn btn-dark" type="submit" value="Comentar">
-                    </div>
-                </form>
+            <br>
+            <h3> Comentarios </h3>
+            <br>
+            <form id="formComentario">
+                @csrf
+                <div>
+                    <input class="form-control" type="text" name="comentario" id="comentario"
+                           placeholder="Escreva seu comentario">
+                </div>
+                <div>
+                    <input class="btn btn-dark" type="submit" value="Comentar">
+                </div>
+            </form>
 
-                <p id="comentarios">
+            <p id="comentarios">
 
-                </p>
-            </div>
-
+            </p>
         </div>
+
+    </div>
     </div>
 @endsection
 
@@ -147,11 +156,11 @@
 
     <script type="text/javascript">
 
-        jQuery(document).ready(function(){
+        jQuery(document).ready(function () {
 
             var token = '{{csrf_token()}}';
 
-            $(document).on('blur','#selectProjeto', function(){
+            $(document).on('blur', '#selectProjeto', function () {
 
                 $('#select').empty();
                 $('#select').append('<option selected disabled> Selecionar Encarregado </option>');
@@ -167,19 +176,19 @@
                     },
                     dataType: 'json'
 
-                }).done(function(data) {
+                }).done(function (data) {
 
-                        for(var i = 0; data.id.length > i; i++){
+                    for (var i = 0; data.id.length > i; i++) {
 
-                            $('#select').append('<option value="'+data.id[i].id+'">'+data.name[i].name+'</option>');
+                        $('#select').append('<option value="' + data.id[i].id + '">' + data.name[i].name + '</option>');
 
-                        }
+                    }
 
-                    });
+                });
 
-                    // complete: function(data){
-                    //     console.log(data);
-                    // }
+                // complete: function(data){
+                //     console.log(data);
+                // }
 
                 // });
 
@@ -202,7 +211,7 @@
                 dataType: 'json',
                 success: function (data) {
 
-                    for(var i = 0; i < data.dados.length; i++){
+                    for (var i = 0; i < data.dados.length; i++) {
 
                         $('#comentarios').append('<ul class="list-group list-group-flush"><li class="list-group-item"><h6>' + data.dados[i].name + '</h6>' + data.dados[i].comentario + ' </li></ul>');
 
@@ -218,7 +227,7 @@
 
             });
 
-            $('#formComentario').submit(function(e) {
+            $('#formComentario').submit(function (e) {
 
                 e.preventDefault();
                 $('#comentario').empty();
@@ -238,7 +247,7 @@
                     success: function (data) {
 
                         console.log(data);
-                        $('#comentarios').append('<ul class="list-group list-group-flush"><li class="list-group-item"><h6>'+data.dados.name+'</h6>'+data.dados.comentario+' </li></ul>');
+                        $('#comentarios').append('<ul class="list-group list-group-flush"><li class="list-group-item"><h6>' + data.dados.name + '</h6>' + data.dados.comentario + ' </li></ul>');
                         // break;
 
                     },

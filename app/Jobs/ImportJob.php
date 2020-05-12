@@ -40,7 +40,7 @@ class ImportJob implements ShouldQueue
     {
         $collection = collect(factory(User::class, 200)->make());
 
-        Storage::disk('public')->put( 'storage/myfile.json', $collection);
+        Storage::disk('public')->put('storage/myfile.json', $collection);
 
         $dados = collect(json_decode(Storage::disk('public')->get('storage/myfile.json')));
 

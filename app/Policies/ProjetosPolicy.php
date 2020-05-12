@@ -16,7 +16,7 @@ class ProjetosPolicy
     /**
      * Determine whether the user can view any projetos.
      *
-     * @param  \App\User  $user
+     * @param \App\User $user
      * @return mixed
      */
     public function viewAny(User $user)
@@ -31,8 +31,8 @@ class ProjetosPolicy
     /**
      * Determine whether the user can view the projetos.
      *
-     * @param  \App\User  $user
-     * @param  \App\Projetos  $projetos
+     * @param \App\User $user
+     * @param \App\Projetos $projetos
      * @return mixed
      */
     public function view(User $user, Projetos $projetos)
@@ -43,7 +43,7 @@ class ProjetosPolicy
     /**
      * Determine whether the user can create projetos.
      *
-     * @param  \App\User  $user
+     * @param \App\User $user
      * @return mixed
      */
     public function create(User $user)
@@ -58,8 +58,8 @@ class ProjetosPolicy
     /**
      * Determine whether the user can update the projetos.
      *
-     * @param  \App\User  $user
-     * @param  \App\Projetos  $projetos
+     * @param \App\User $user
+     * @param \App\Projetos $projetos
      * @return mixed
      */
     public function update()
@@ -73,8 +73,8 @@ class ProjetosPolicy
     /**
      * Determine whether the user can delete the projetos.
      *
-     * @param  \App\User  $user
-     * @param  \App\Projetos  $projetos
+     * @param \App\User $user
+     * @param \App\Projetos $projetos
      * @return mixed
      */
     public function delete(User $user)
@@ -87,8 +87,8 @@ class ProjetosPolicy
     /**
      * Determine whether the user can restore the projetos.
      *
-     * @param  \App\User  $user
-     * @param  \App\Projetos  $projetos
+     * @param \App\User $user
+     * @param \App\Projetos $projetos
      * @return mixed
      */
     public function restore(User $user, Projetos $projetos)
@@ -99,8 +99,8 @@ class ProjetosPolicy
     /**
      * Determine whether the user can permanently delete the projetos.
      *
-     * @param  \App\User  $user
-     * @param  \App\Projetos  $projetos
+     * @param \App\User $user
+     * @param \App\Projetos $projetos
      * @return mixed
      */
     public function forceDelete(User $user, Projetos $projetos)

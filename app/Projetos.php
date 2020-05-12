@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Projetos extends Model
 {
-    
+
     protected $dates = [
         'created_at',
         'updated_at'
@@ -26,6 +26,6 @@ class Projetos extends Model
     public function demandas()
     {
         return $this->belongsToMany('App\Demandas');
-    }    
-    
+    }
+
 }

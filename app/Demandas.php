@@ -7,7 +7,7 @@ use Illuminate\Notifications\Notifiable;
 
 class Demandas extends Model
 {
-    
+
     use Notifiable;
 
     protected $dates = [
@@ -20,9 +20,11 @@ class Demandas extends Model
         'titulo',
         'descricao',
         'estado',
-        'projeto_id'
+        'projeto_id',
+        'user_id'
+
     ];
-    
+
     public function projetos()
     {
         return $this->hasOne('App\Projetos');

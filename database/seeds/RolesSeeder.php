@@ -18,6 +18,6 @@ class RolesSeeder extends Seeder
         Role::create(['name' => 'Admin Projetos']);
         Role::create(['name' => 'Admin Demandas']);
         Role::create(['name' => 'User Padrao']);
-        
+
     }
 }

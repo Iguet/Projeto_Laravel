@@ -12,7 +12,7 @@ class UserSeeder extends Seeder
      */
     public function run(User $users)
     {
-        
+
         DB::table('users')->insert([
             'id' => 1,
             'name' => 'admin',
@@ -21,7 +21,7 @@ class UserSeeder extends Seeder
         ]);
 
         $user = $users->find(1);
-        
+
         $user->givePermissionTo([
             'Criar Projetos',
             'Criar Demandas',

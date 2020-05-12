@@ -42,16 +42,16 @@ class ComentariosController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request,Comentarios $comentarios)
+    public function store(Request $request, Comentarios $comentarios)
     {
-       
+
         $comentarios->comentario = $request->comentario;
         $comentarios->demanda_id = $request->idDemanda;
         $comentarios->save();
-        
+
         // dd($result);
 
         $result['dados'] = DB::table('comentarios')
@@ -72,7 +72,7 @@ class ComentariosController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Comentarios  $comentarios
+     * @param \App\Comentarios $comentarios
      * @return \Illuminate\Http\Response
      */
     public function show(Comentarios $comentarios)
@@ -83,7 +83,7 @@ class ComentariosController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Comentarios  $comentarios
+     * @param \App\Comentarios $comentarios
      * @return \Illuminate\Http\Response
      */
     public function edit(Comentarios $comentarios)
@@ -94,8 +94,8 @@ class ComentariosController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Comentarios  $comentarios
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Comentarios $comentarios
      * @return \Illuminate\Http\Response
      */
     public function update(Request $request, Comentarios $comentarios)
@@ -106,7 +106,7 @@ class ComentariosController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Comentarios  $comentarios
+     * @param \App\Comentarios $comentarios
      * @return \Illuminate\Http\Response
      */
     public function destroy(Comentarios $comentarios)

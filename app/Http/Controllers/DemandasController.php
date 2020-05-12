@@ -34,22 +34,22 @@ class DemandasController extends Controller
 
         // dd($data);
 
-        if ($user->hasAnyRole('Admin Demandas', 'Admin')){
+        if ($user->hasAnyRole('Admin Demandas', 'Admin')) {
 
             $dados = DB::table('projetos')
-                        ->join('demandas', 'demandas.projeto_id', '=', 'projetos.id')
-                        ->join('users', 'users.id', '=', 'demandas.user_id')
-                        ->select('projetos.name as nomeProjeto', 'projetos.id as idProjeto', 'users.name', 'demandas.id', 'demandas.titulo', 'demandas.descricao', 'demandas.estado', 'demandas.created_at')
-                        ->get();
+                ->join('demandas', 'demandas.projeto_id', '=', 'projetos.id')
+                ->join('users', 'users.id', '=', 'demandas.user_id')
+                ->select('projetos.name as nomeProjeto', 'projetos.id as idProjeto', 'users.name', 'demandas.id', 'demandas.titulo', 'demandas.descricao', 'demandas.estado', 'demandas.created_at')
+                ->get();
 
         } else {
 
             $dados = DB::table('projetos')
-                        ->join('demandas', 'demandas.projeto_id', '=', 'projetos.id')
-                        ->join('users', 'users.id', '=', 'demandas.user_id')
-                        ->select('projetos.name as nomeProjeto', 'projetos.id as idProjeto', 'users.name', 'demandas.id', 'demandas.titulo', 'demandas.descricao', 'demandas.estado', 'demandas.created_at')
-                        ->where('demandas.user_id', '=', $id)
-                        ->get();
+                ->join('demandas', 'demandas.projeto_id', '=', 'projetos.id')
+                ->join('users', 'users.id', '=', 'demandas.user_id')
+                ->select('projetos.name as nomeProjeto', 'projetos.id as idProjeto', 'users.name', 'demandas.id', 'demandas.titulo', 'demandas.descricao', 'demandas.estado', 'demandas.created_at')
+                ->where('demandas.user_id', '=', $id)
+                ->get();
 
         }
 
@@ -83,7 +83,7 @@ class DemandasController extends Controller
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
     public function store(DemandasRequest $request, User $users, Demandas $demandas, NovaDemanda $notification)
@@ -109,7 +109,7 @@ class DemandasController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Demandas  $demandas
+     * @param \App\Demandas $demandas
      * @return \Illuminate\Http\Response
      */
     public function show(Demandas $demandas, Request $request)
@@ -138,7 +138,7 @@ class DemandasController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Demandas  $demandas
+     * @param \App\Demandas $demandas
      * @return \Illuminate\Http\Response
      */
     public function edit(Demandas $demandas, Request $request, $id, $idProjeto)
@@ -166,10 +166,10 @@ class DemandasController extends Controller
             ->first();
 
         $usersProjetos = DB::table('users')
-                ->join('users_projetos', 'users.id', '=', 'users_projetos.users_id')
-                ->select('users.id', 'users.name', 'users.email')
-                ->where('projetos_id', '=', $idProjeto)
-                ->get();
+            ->join('users_projetos', 'users.id', '=', 'users_projetos.users_id')
+            ->select('users.id', 'users.name', 'users.email')
+            ->where('projetos_id', '=', $idProjeto)
+            ->get();
 
         return view('demandas\edita', [
             'projetos' => $projetos,
@@ -183,8 +183,8 @@ class DemandasController extends Controller
     /**
      * Update the specified resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Demandas  $demandas
+     * @param \Illuminate\Http\Request $request
+     * @param \App\Demandas $demandas
      * @return \Illuminate\Http\Response
      */
     public function update(DemandasRequest $request, Demandas $demandas, $id, User $users, NovaDemanda $notification)
@@ -211,7 +211,7 @@ class DemandasController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Demandas  $demandas
+     * @param \App\Demandas $demandas
      * @return \Illuminate\Http\Response
      */
     public function destroy(Demandas $demandas, $id)
@@ -222,8 +222,8 @@ class DemandasController extends Controller
         $result = $demandas->find($id);
 
         $coment = DB::table('comentarios')
-                    ->where('demanda_id', $id)
-                    ->delete();
+            ->where('demanda_id', $id)
+            ->delete();
 
         $result->delete();
         return redirect()->route('listaDemandas');

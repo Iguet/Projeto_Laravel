@@ -32,7 +32,7 @@ class ProjetosRequest extends FormRequest
                     return $query->where('name', 'name');
                 }),
                 'max:50'
-             ],
+            ],
             'descricao' => 'required|max:50',
         ];
     }
