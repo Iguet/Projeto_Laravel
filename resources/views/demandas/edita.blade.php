@@ -40,7 +40,7 @@
                     <label> Usuario </label>
                     @can('update', App\Demandas::class)
 
-                        <select class="form-control" id="select" name="user">
+                        <select class="form-control" id="select" name="user_id">
                             <option disabled selected> Selecionar Encarregado</option>
                             @foreach ($usersProjetos as $users)
                                 @if ($users->id == $userDemandas->id)
@@ -51,7 +51,7 @@
                                 @endif
                             @endforeach
                         </select>
-                        @error('user')
+                        @error('user_id')
                         <div class="alert alert-danger">{{ $message }}</div>
                         @enderror
 
@@ -66,7 +66,7 @@
                     <label> Titulo </label>
                     @can('update', App\Demandas::class)
 
-                        <input class="form-control" type="text" name="Titulo" placeholder="titulo"
+                        <input class="form-control" type="text" name="titulo" placeholder="titulo"
                                value="{{ $demandas->titulo }}">
                         @error('titulo')
                         <div class="alert alert-danger">{{ $message }}</div>
@@ -100,7 +100,6 @@
                     <label> Estado </label>
 
                     @can('update', App\Demandas::class)
-
                         <select class="form-control" name="estado">
                             <option selected disabled> Selecionar Estado</option>
                             <option> Nova</option>
@@ -121,10 +120,8 @@
                     @can('update', App\Demandas::class)
                 </div>
 
-                <input class="btn btn-inserir btn-default" type="submit" value="Editar" name="editaDemanda"
+                    <input class="btn btn-inserir btn-default" type="submit" value="Editar" name="editaDemanda"
                        id="editaDemanda">
-
-                <div>
                 @endcan
             </form>
             <br>

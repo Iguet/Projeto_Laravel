@@ -6,6 +6,7 @@ use App\Demandas;
 use App\User;
 use auth;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use Illuminate\Auth\Access\Response;
 
 class DemandasPolicy
 {
@@ -38,7 +39,9 @@ class DemandasPolicy
 
         $user = Auth::user();
 
-        return $user->can('Vizualizar Demandas');
+        return $user->can('Vizualizar Demandas')
+                ? Response::allow('TESTE')
+                : Response::deny('Você não ter permissão para vizualizar demandas');
 
     }
 
@@ -64,12 +67,14 @@ class DemandasPolicy
      * @param \App\Demandas $demandas
      * @return mixed
      */
-    public function update(User $user)
+    public function update()
     {
 
         $user = Auth::user();
 
-        return $user->can('Editar Demandas');
+        return $user->can('Editar Demandas')
+                    ? Response::allow()
+                    : Response::deny('Você não ter permissão para editar demandas');
 
     }
 
@@ -85,7 +90,9 @@ class DemandasPolicy
 
         $user = Auth::user();
 
-        return $user->can('Deletar Demandas');
+        return $user->can('Deletar Demandas')
+            ? Response::allow()
+            : Response::deny('Você não ter permissão para deletar demandas');
 
     }
 

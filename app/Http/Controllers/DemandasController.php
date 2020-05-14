@@ -11,8 +11,6 @@ use Auth;
 use App\Notifications\NovaDemanda;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Spatie\Permission\Models\Role;
-use Spatie\Permission\Models\Permission;
 use App\Events\NotificationEvent;
 
 class DemandasController extends Controller
@@ -83,7 +81,7 @@ class DemandasController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(DemandasRequest $request, Demandas $demandas, NovaDemanda $notification)
+    public function store(DemandasRequest $request, Demandas $demandas)
     {
 
         $this->authorize('create', $demandas);
@@ -96,7 +94,7 @@ class DemandasController extends Controller
         $demandas->estado = 'nova';
         $demandas->save();
 
-        $user = $request->User;
+        $user = $request->user_id;
 
         event(new NotificationEvent($user));
 
@@ -184,10 +182,14 @@ class DemandasController extends Controller
      * @param \App\Demandas $demandas
      * @return \Illuminate\Http\Response
      */
-    public function update(DemandasUpdateRequest $request, Demandas $demandas, $id, User $users, NovaDemanda $notification)
+    public function update(DemandasUpdateRequest $request, Demandas $demandas, $id)
     {
 
+//        dd($this->authorize('update', $demandas));
+
         $this->authorize('update', $demandas);
+
+//        dd($request);
 
         $dados = $demandas->find($id);
         $dados->titulo = $request->titulo;
@@ -197,7 +199,7 @@ class DemandasController extends Controller
         $dados->user_id = $request->user_id;
         $dados->save();
 
-        $user = $request->User;
+        $user = $request->user_id;
 
         event(new NotificationEvent($user));
 

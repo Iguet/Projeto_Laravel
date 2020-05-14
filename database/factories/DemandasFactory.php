@@ -7,8 +7,8 @@ use Faker\Generator as Faker;
 
 $factory->define(Demandas::class, function (Faker $faker) {
     return [
-        'titulo' => $faker->sentence(2),
-        'descricao' => $faker->paragraph(1),
+        'titulo' => $faker->word(),
+        'descricao' => $faker->sentence(2),
         'estado' => 'nova',
         'projeto_id' => 1,
         'user_id' => 1

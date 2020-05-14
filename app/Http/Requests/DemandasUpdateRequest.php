@@ -25,17 +25,17 @@ class DemandasUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'Titulo' => [
+            'titulo' => [
                 'required',
                 Rule::unique('demandas')->where(function ($query) {
-                    return $query->where('titulo', 'Titulo');
+                    return $query->where('titulo', 'titulo');
                 }),
                 'max:50'
             ],
-            'Descricao' => ['required', 'max:50'],
-            'Projeto' => ['required'],
-            'User' => ['required'],
-            'Estado' => ['required']
+            'descricao' => ['required', 'max:50'],
+            'projeto_id' => ['required'],
+            'user_id' => ['required'],
+            'estado' => ['required']
 
         ];
     }
@@ -44,14 +44,14 @@ class DemandasUpdateRequest extends FormRequest
     {
 
         return [
-            'Titulo.required' => 'O campo é obrigatório',
-            'Titulo.unique' => 'O campo deve ser único',
-            'Titulo.max' => 'O campo deve ter no máximo 50 caracteres',
-            'Descricao.required' => 'O campo é obrigatório',
-            'Descricao.max' => 'O campo deve ter no máximo 50 caracteres',
-            'Projeto.required' => 'O campo é obrigatório',
-            'User.required' => 'O campo é obrigatório',
-            'Estado.required' => 'O campo é obrigatório'
+            'titulo.required' => 'O campo é obrigatório',
+            'titulo.unique' => 'O campo deve ser único',
+            'titulo.max' => 'O campo deve ter no máximo 50 caracteres',
+            'descricao.required' => 'O campo é obrigatório',
+            'descricao.max' => 'O campo deve ter no máximo 50 caracteres',
+            'projeto_id.required' => 'O campo é obrigatório',
+            'user_id.required' => 'O campo é obrigatório',
+            'estado.required' => 'O campo é obrigatório'
         ];
 
     }

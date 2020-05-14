@@ -24,9 +24,7 @@ class DemandasTest extends TestCase
 
         Event::fake();
 
-        Projetos::create($this->projeto());
-
-//        UsersProjetos::create($this->userProjeto());
+        Projetos::create($this->data()->projeto());
 
     }
 
@@ -42,7 +40,7 @@ class DemandasTest extends TestCase
     public function test_user_have_permission_to_see_demandas()
     {
 
-        $response = $this->actingAs($this->userPadrao())
+        $response = $this->actingAs($this->data()->userPadrao())
             ->get('/demandas')
             ->assertOk();
 
@@ -61,7 +59,7 @@ class DemandasTest extends TestCase
     public function test_user_has_permission_to_see_the_form_to_create_demandas()
     {
 
-        $response = $this->actingAs($this->adminDemandas())
+        $response = $this->actingAs($this->data()->adminDemandas())
             ->get('/demandas/cadastrar')
             ->assertOk();
 
@@ -79,8 +77,8 @@ class DemandasTest extends TestCase
     public function test_user_has_permission_to_create_demandas()
     {
 
-        $response = $this->actingAs($this->adminDemandas())
-            ->post('/demandas', $this->demanda());
+        $response = $this->actingAs($this->data()->adminDemandas())
+            ->post('/demandas', $this->data()->demanda());
 
         $this->assertCount(1, Demandas::all());
 
@@ -89,28 +87,89 @@ class DemandasTest extends TestCase
     public function test_user_dont_have_permission_to_create_demandas()
     {
 
-        $response = $this->actingAs($this->userPadrao())
-            ->post('/demandas', $this->demanda())->assertForbidden();
+        $response = $this->actingAs($this->data()->userPadrao())
+            ->post('/demandas', $this->data()->demanda())
+            ->assertStatus(403);
 
     }
 
     public function test_user_has_permission_to_see_the_form_to_edit_demandas()
     {
 
-        $this->withoutExceptionHandling();
+//        $this->withoutExceptionHandling();
 
-//        Demandas::create($this->demanda());
+        $this->data()->createDemanda();
 
-        Demandas::create($this->demanda());
-
-        $this->user();
-
-//        dd(Demandas::all());
-
-        $response = $this->actingAs($this->adminDemandas())
+        $response = $this->actingAs($this->data()->adminDemandas())
             ->get('/demandas/1/1/editar')
             ->assertOk();
 
+
+    }
+
+//    public function test_user_dont_have_permission_to_update_demandas()
+//    {
+//
+//        $this->withoutExceptionHandling();
+//
+//        Demandas::create($this->demanda());
+//
+//        $response = $this->actingAs($this->userPadrao())
+//            ->put('/demandas/1', $this->demanda());
+//
+//        $response = $this->assertIsArray([
+//            'allowed' => 'false',
+//            'message' => 'Você não ter permissão para editar demandas',
+//            'code' => 'null'
+//        ]);
+//
+////        $response->;
+////            ->assertStatus(401);
+//
+//
+//    }
+
+    public function test_user_has_permission_to_update_demandas()
+    {
+
+        $this->withoutExceptionHandling();
+
+        $this->data()->createDemanda();
+
+        $response = $this->actingAs($this->data()->adminDemandas())
+            ->put('/demandas/1', $this->data()->demanda())
+            ->assertRedirect();
+
+        $this->assertCount(1, Demandas::all());
+
+    }
+
+//    public function test_user_dont_have_permission_to_delete_demandas()
+//    {
+//
+//        $this->withoutExceptionHandling();
+//
+////        Demandas::create($this->demanda());
+//
+//        $response = $this->actingAs($this->userPadrao())
+//            ->post('/demandas/delete/1')
+//            ->assertRedirect();
+//
+//        $this->assertCount(0, Demandas::all());
+//
+//    }
+
+    public function test_user_has_permission_to_delete_demandas()
+    {
+        $this->withoutExceptionHandling();
+
+        $this->data()->createDemanda();
+
+        $response = $this->actingAs($this->data()->adminDemandas())
+            ->post('/demandas/delete/1')
+            ->assertRedirect();
+
+        $this->assertCount(0, Demandas::all());
 
     }
 
@@ -123,95 +182,11 @@ class DemandasTest extends TestCase
 
     }
 
-    private function demanda()
+    private function data()
     {
 
-        return [
-            'id' => 1,
-            'titulo' => 'teste',
-            'descricao' => 'teste',
-            'projeto_id' => $this->projeto()['id'],
-            'user_id' => $this->user()->id,
-            'estado' => 'nova'
-        ];
+        return $data = new FunctionsTest();
 
     }
-
-    private function projeto()
-    {
-
-        return [
-            'id' => 1,
-            'name' => 'teste',
-            'descricao' => 'descricao teste',
-        ];
-
-    }
-
-    private function userProjeto()
-    {
-
-        return [
-            'users_id' => $this->user()->id,
-            'projetos_id' => $this->projeto()['id'],
-
-        ];
-
-    }
-
-    private function permissionsAdminDemandas()
-    {
-
-        Permission::create(['name' => 'Criar Demandas']);
-        Permission::create(['name' => 'Editar Demandas']);
-        Permission::create(['name' => 'Deletar Demandas']);
-        Permission::create(['name' => 'Vizualizar Demandas']);
-
-        return Permission::all();
-
-    }
-
-    private function permissionsAdminProjetos()
-    {
-
-        Permission::create(['name' => 'Criar Projetos']);
-        Permission::create(['name' => 'Editar Projetos']);
-        Permission::create(['name' => 'Deletar Projetos']);
-        Permission::create(['name' => 'Vizualizar Projetos']);
-
-        return Permission::all();
-
-    }
-
-    private function permissionsUserPadrao()
-    {
-
-        Permission::create(['name' => 'Vizualizar Demandas']);
-
-        return Permission::all();
-
-    }
-
-    private function userPadrao()
-    {
-
-        return $this->user()->givePermissionTo($this->permissionsUserPadrao());
-
-    }
-
-    private function adminDemandas()
-    {
-
-        return $this->user()->givePermissionTo($this->permissionsAdminDemandas());
-
-    }
-
-    private function adminProjetos()
-    {
-
-        return $this->user()->givePermissionTo($this->permissionsAdminProjetos());
-
-    }
-
 
 }

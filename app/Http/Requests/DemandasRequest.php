@@ -30,7 +30,7 @@ class DemandasRequest extends FormRequest
             'titulo' => [
                 'required',
                 Rule::unique('demandas')->where(function ($query) {
-                    return $query->where('titulo', 'Titulo');
+                    return $query->where('titulo', 'titulo');
                 }),
                 'max:50'
             ],
