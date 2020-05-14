@@ -15,7 +15,7 @@ class Demandas extends Model
         'updated_at'
     ];
 
-    protected $filliable = [
+    protected $fillable = [
         'id',
         'titulo',
         'descricao',

@@ -72,7 +72,6 @@ Route::group(['prefix' => 'profile', 'middleware' => 'auth'], function () {
 Route::get('import', function () {
 
     \App\Jobs\ImportJob::dispatch();
-
     return redirect()->route('home');
 
 })->name('importJob');

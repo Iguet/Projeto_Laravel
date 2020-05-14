@@ -67,12 +67,10 @@ class ProjetosController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(ProjetosRequest $request, UsersProjetos $usersProjetos, Projetos $projetos)
+    public function store(ProjetosRequest $request, Projetos $projetos)
     {
 
         $this->authorize('create', $projetos);
-
-        $usersProjetos = new UsersProjetos();
 
         $projetos->name = $request->name;
         $projetos->descricao = $request->descricao;

@@ -12,7 +12,7 @@ class Comentarios extends Model
         'updated_at'
     ];
 
-    protected $filliable = [
+    protected $fillable = [
         'id',
         'comentario',
         'demanda_id'

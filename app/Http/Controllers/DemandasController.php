@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Demandas;
 use App\Http\Requests\DemandasRequest;
+use App\Http\Requests\DemandasUpdateRequest;
 use App\Projetos;
 use App\User;
 use Auth;
@@ -29,10 +30,6 @@ class DemandasController extends Controller
         $id = Auth::user()->id;
 
         $user = Auth::user();
-
-        // $notifications = $user->unreadNotifications;
-
-        // dd($data);
 
         if ($user->hasAnyRole('Admin Demandas', 'Admin')) {
 
@@ -86,17 +83,17 @@ class DemandasController extends Controller
      * @param \Illuminate\Http\Request $request
      * @return \Illuminate\Http\Response
      */
-    public function store(DemandasRequest $request, User $users, Demandas $demandas, NovaDemanda $notification)
+    public function store(DemandasRequest $request, Demandas $demandas, NovaDemanda $notification)
     {
-
 
         $this->authorize('create', $demandas);
 
         $demandas = new Demandas;
-        $demandas->titulo = $request->Titulo;
-        $demandas->descricao = $request->Descricao;
-        $demandas->projeto_id = $request->Projeto;
-        $demandas->user_id = $request->User;
+        $demandas->titulo = $request->titulo;
+        $demandas->descricao = $request->descricao;
+        $demandas->projeto_id = $request->projeto_id;
+        $demandas->user_id = $request->user_id;
+        $demandas->estado = 'nova';
         $demandas->save();
 
         $user = $request->User;
@@ -187,17 +184,17 @@ class DemandasController extends Controller
      * @param \App\Demandas $demandas
      * @return \Illuminate\Http\Response
      */
-    public function update(DemandasRequest $request, Demandas $demandas, $id, User $users, NovaDemanda $notification)
+    public function update(DemandasUpdateRequest $request, Demandas $demandas, $id, User $users, NovaDemanda $notification)
     {
 
         $this->authorize('update', $demandas);
 
         $dados = $demandas->find($id);
-        $dados->titulo = $request->Titulo;
-        $dados->descricao = $request->Descricao;
-        $dados->estado = $request->Estado;
-        $dados->projeto_id = $request->Projeto;
-        $dados->user_id = $request->User;
+        $dados->titulo = $request->titulo;
+        $dados->descricao = $request->descricao;
+        $dados->estado = $request->estado;
+        $dados->projeto_id = $request->projeto_id;
+        $dados->user_id = $request->user_id;
         $dados->save();
 
         $user = $request->User;

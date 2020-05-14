@@ -12,9 +12,9 @@ class Projetos extends Model
         'updated_at'
     ];
 
-    protected $filliable = [
+    protected $fillable = [
         'id',
-        'nome',
+        'name',
         'descricao'
     ];
 

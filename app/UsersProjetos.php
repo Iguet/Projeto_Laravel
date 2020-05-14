@@ -4,7 +4,7 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class usersProjetos extends Model
+class UsersProjetos extends Model
 {
 
     protected $dates = [
@@ -12,7 +12,7 @@ class usersProjetos extends Model
         'updated_at'
     ];
 
-    protected $filliable = [
+    protected $fillable = [
         'users_id',
         'projetos_id'
     ];

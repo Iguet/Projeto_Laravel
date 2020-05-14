@@ -15,7 +15,7 @@
                 <div>
                     <label> Projeto </label>
                     @can('update', App\Demandas::class)
-                        <select class="form-control" id="selectProjeto" name="Projeto">
+                        <select class="form-control" id="selectProjeto" name="projeto_id">
                             <option disabled>Selecionar Projetos</option>
                             @foreach ($projetos as $projetos)
                                 @if ($projetos->id == $demandas->projeto_id)
@@ -26,7 +26,7 @@
                                 @endif
                             @endforeach
                         </select>
-                        @error('Projeto')
+                        @error('projeto_id')
                         <div class="alert alert-danger">{{ $message }}</div>
                         @enderror
                     @elsecan('view', App\Demandas::class)
@@ -40,7 +40,7 @@
                     <label> Usuario </label>
                     @can('update', App\Demandas::class)
 
-                        <select class="form-control" id="select" name="User">
+                        <select class="form-control" id="select" name="user">
                             <option disabled selected> Selecionar Encarregado</option>
                             @foreach ($usersProjetos as $users)
                                 @if ($users->id == $userDemandas->id)
@@ -51,7 +51,7 @@
                                 @endif
                             @endforeach
                         </select>
-                        @error('User')
+                        @error('user')
                         <div class="alert alert-danger">{{ $message }}</div>
                         @enderror
 
@@ -66,9 +66,9 @@
                     <label> Titulo </label>
                     @can('update', App\Demandas::class)
 
-                        <input class="form-control" type="text" name="Titulo" placeholder="Titulo"
+                        <input class="form-control" type="text" name="Titulo" placeholder="titulo"
                                value="{{ $demandas->titulo }}">
-                        @error('Titulo')
+                        @error('titulo')
                         <div class="alert alert-danger">{{ $message }}</div>
                         @enderror
 
@@ -83,9 +83,9 @@
                     <label> Descrição </label>
                     @can('update', App\Demandas::class)
 
-                        <input class="form-control" type="text" name="Descricao" placeholder="Descrição"
+                        <input class="form-control" type="text" name="descricao" placeholder="Descrição"
                                value="{{ $demandas->descricao }}">
-                        @error('Descricao')
+                        @error('descricao')
                         <div class="alert alert-danger">{{ $message }}</div>
                         @enderror
 
@@ -101,14 +101,14 @@
 
                     @can('update', App\Demandas::class)
 
-                        <select class="form-control" name="Estado">
+                        <select class="form-control" name="estado">
                             <option selected disabled> Selecionar Estado</option>
                             <option> Nova</option>
                             <option> Em Progresso</option>
                             <option> Parada</option>
                             <option> Finalizada</option>
                         </select>
-                        @error('Estado')
+                        @error('estado')
                         <div class="alert alert-danger">{{ $message }}</div>
                         @enderror
 

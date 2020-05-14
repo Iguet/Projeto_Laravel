@@ -8,37 +8,37 @@
                   method="post">
                 @csrf
                 <div class="form-group">
-                    <select class="form-control listaProjeto" id="selectProjeto" name="Projeto">
+                    <select class="form-control listaProjeto" id="selectProjeto" name="projeto_id">
                         <option selected disabled>Projeto</option>
                         @foreach ($projetos as $projetos)
                             <option value="{{ $projetos->id }}">{{ $projetos->name }}</option>
                         @endforeach
                     </select>
-                    @error('Projeto')
+                    @error('projeto_id')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
                 </div>
                 <div class="form-group">
-                    <select class="form-control" id="select" name="User">
+                    <select class="form-control" id="select" name="user_id">
                         <option selected disabled>Encarregado</option>
                         @foreach ($users as $user)
                             <option value="{{ $user->id }}">{{ $user->name }}</option>
                         @endforeach
                     </select>
-                    @error('User')
+                    @error('user_id')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
                 </div>
                 <div class="form-group">
-                    <input class="form-control" type="text" name="Titulo" id="Titulo" placeholder="Titulo">
-                    @error('Titulo')
+                    <input class="form-control" type="text" name="titulo" id="Titulo" placeholder="Titulo">
+                    @error('titulo')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
                 </div>
                 <div class="form-group">
-                    <textarea class="form-control" type="text" name="Descricao" id="Descricao" placeholder="Descrição"
+                    <textarea class="form-control" type="text" name="descricao" id="Descricao" placeholder="Descrição"
                               rows="1"></textarea>
-                    @error('Descricao')
+                    @error('descricao')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
                 </div>
