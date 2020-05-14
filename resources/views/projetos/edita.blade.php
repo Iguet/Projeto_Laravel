@@ -4,7 +4,7 @@
     <div class="container">
         <div class="container">
             <form class="form-group"
-                  action=" {{ route('updateProjetos', ['id' => $projetos->id], ['idUser' => $id]) }} " method="post">
+                  action=" {{ route('updateProjetos', ['id' => $projetos->id]) }} " method="post">
                 @csrf
                 @method('PUT')
                 <div class="form-group">
@@ -38,7 +38,7 @@
                     @foreach ($tem as $user)
 
                         <tr>
-                            <td><input type="checkbox" checked name="id[]" value=" {{ $user->id }} "></td>
+                            <td><input type="checkbox" checked name="user_id[]" value=" {{ $user->id }} "></td>
                             <td> {{ $user->id }} </td>
                             <td> {{ $user->name }} </td>
                             <td> {{ $user->email }} </td>
@@ -48,7 +48,7 @@
                     @foreach ($naotem as $verifica)
 
                         <tr>
-                            <td><input type="checkbox" name="id[]" value=" {{ $verifica->id }} "></td>
+                            <td><input type="checkbox" name="user_id[]" value=" {{ $verifica->id }} "></td>
                             <td> {{ $verifica->id }} </td>
                             <td> {{ $verifica->name }} </td>
                             <td> {{ $verifica->email }} </td>

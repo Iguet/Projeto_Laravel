@@ -49,7 +49,7 @@ Route::group(['prefix' => 'projetos', 'middleware' => 'auth'], function () {
     Route::post('/', 'ProjetosController@store')->name('cadastroProjetos');
     Route::get('/{id}/editar', 'ProjetosController@edit')->name('editaProjetos');
     Route::put('/{id}', 'ProjetosController@update')->name('updateProjetos');
-    Route::post('/{id}', 'ProjetosController@destroy')->name('destroyProjetos');
+    Route::post('/delete/{id}', 'ProjetosController@destroy')->name('destroyProjetos');
 
 });
 

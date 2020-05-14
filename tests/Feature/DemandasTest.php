@@ -6,6 +6,7 @@ use App\Demandas;
 use App\Projetos;
 use App\User;
 use App\UsersProjetos;
+use Illuminate\Auth\Access\AuthorizationException;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Support\Facades\Event;
@@ -89,7 +90,9 @@ class DemandasTest extends TestCase
 
         $response = $this->actingAs($this->data()->userPadrao())
             ->post('/demandas', $this->data()->demanda())
-            ->assertStatus(403);
+            ->assertForbidden();
+
+        $this->assertCount(0, Demandas::all());
 
     }
 
@@ -107,27 +110,18 @@ class DemandasTest extends TestCase
 
     }
 
-//    public function test_user_dont_have_permission_to_update_demandas()
-//    {
-//
-//        $this->withoutExceptionHandling();
-//
-//        Demandas::create($this->demanda());
-//
-//        $response = $this->actingAs($this->userPadrao())
-//            ->put('/demandas/1', $this->demanda());
-//
-//        $response = $this->assertIsArray([
-//            'allowed' => 'false',
-//            'message' => 'Você não ter permissão para editar demandas',
-//            'code' => 'null'
-//        ]);
-//
-////        $response->;
-////            ->assertStatus(401);
-//
-//
-//    }
+    public function test_user_dont_have_permission_to_update_demandas()
+    {
+
+        $this->withoutExceptionHandling();
+
+        $this->data()->createDemanda();
+
+        $response = $this->actingAs($this->data()->userPadrao())
+            ->put('/demandas/1', $this->data()->demanda());
+
+        $response->exception(AuthorizationException::class);
+    }
 
     public function test_user_has_permission_to_update_demandas()
     {
@@ -149,11 +143,11 @@ class DemandasTest extends TestCase
 //
 //        $this->withoutExceptionHandling();
 //
-////        Demandas::create($this->demanda());
+//        $this->data()->createDemanda();
 //
-//        $response = $this->actingAs($this->userPadrao())
+//        $this->actingAs($this->data()->userPadrao())
 //            ->post('/demandas/delete/1')
-//            ->assertRedirect();
+//            ->assertForbidden();
 //
 //        $this->assertCount(0, Demandas::all());
 //

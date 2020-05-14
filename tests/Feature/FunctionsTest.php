@@ -33,7 +33,7 @@ class FunctionsTest extends TestCase
             'titulo' => 'teste',
             'descricao' => 'teste',
             'projeto_id' => $this->projeto()['id'],
-            'user_id' => $this->user()->id,
+            'user_id' => 1,
             'estado' => 'nova'
         ];
 

@@ -8,7 +8,7 @@
                   method="post">
                 @csrf
                 <div class="form-group">
-                    <select class="form-control listaProjeto" id="selectProjeto" name="projeto_id">
+                    <select dusk="projeto" class="form-control listaProjeto" id="selectProjeto" name="projeto_id">
                         <option selected disabled>Projeto</option>
                         @foreach ($projetos as $projetos)
                             <option value="{{ $projetos->id }}">{{ $projetos->name }}</option>
@@ -19,7 +19,7 @@
                     @enderror
                 </div>
                 <div class="form-group">
-                    <select class="form-control" id="select" name="user_id">
+                    <select dusk="user" class="form-control" id="select" name="user_id">
                         <option selected disabled>Encarregado</option>
                         @foreach ($users as $user)
                             <option value="{{ $user->id }}">{{ $user->name }}</option>
@@ -30,13 +30,13 @@
                     @enderror
                 </div>
                 <div class="form-group">
-                    <input class="form-control" type="text" name="titulo" id="Titulo" placeholder="Titulo">
+                    <input dusk="titulo" class="form-control" type="text" name="titulo" id="Titulo" placeholder="Titulo">
                     @error('titulo')
                     <div class="alert alert-danger">{{ $message }}</div>
                     @enderror
                 </div>
                 <div class="form-group">
-                    <textarea class="form-control" type="text" name="descricao" id="Descricao" placeholder="Descrição"
+                    <textarea dusk="descricao" class="form-control" type="text" name="descricao" id="Descricao" placeholder="Descrição"
                               rows="1"></textarea>
                     @error('descricao')
                     <div class="alert alert-danger">{{ $message }}</div>
@@ -44,7 +44,7 @@
                 </div>
                 <div>
                     <input class="btn btn-inserir btn-default" type="submit" value="Cadastrar Demanda" name="Demanda"
-                           id="CriarDemanda">
+                           dusk="CriarDemanda">
                 </div>
             </form>
         </div>

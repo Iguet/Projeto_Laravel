@@ -76,11 +76,13 @@ class ProjetosController extends Controller
         $projetos->descricao = $request->descricao;
         $projetos->save();
 
-        $idProjeto = DB::table('projetos')->where('name', $request->name)->value('id');
+        $idProjeto = DB::table('projetos')
+            ->where('name', $request->name)
+            ->value('id');
 
-        if ($request->has('id')) {
+        if ($request->has('users_id')) {
 
-            foreach ($request->id as $id) {
+            foreach ($request->users_id as $id) {
 
                 DB::table('users_projetos')->insert(
                     ['users_id' => $id, 'projetos_id' => $idProjeto, 'created_at' => now(), 'updated_at' => now()]
@@ -169,14 +171,12 @@ class ProjetosController extends Controller
      * @param \App\Projetos $projetos
      * @return \Illuminate\Http\Response
      */
-    public function update(ProjetosRequest $request, Projetos $projetos, UsersProjetos $usersProjetos, $id)
+    public function update(ProjetosRequest $request, Projetos $projetos, $id)
     {
 
         DB::beginTransaction();
 
         $this->authorize('update', $projetos);
-
-        $usersProjetos = new UsersProjetos;
 
         $result = $projetos->find($id);
 
@@ -184,7 +184,7 @@ class ProjetosController extends Controller
         $result->descricao = $request->descricao;
         $result->save();
 
-        if ($request->has('id')) {
+        if ($request->has('user_id')) {
 
             $consultaUsersProjetos = DB::table('users')
                 ->select('users.id', 'name', 'email')
@@ -197,16 +197,18 @@ class ProjetosController extends Controller
 
                 DB::table('users_projetos')->where('projetos_id', '=', $id)->delete();
 
-                foreach ($request->id as $consulta) {
+                foreach ($request->user_id as $consulta) {
 
-                    DB::table('users_projetos')->Insert(
-                        ['users_id' => $consulta, 'projetos_id' => $id, 'created_at' => now(), 'updated_at' => now()]
-                    );
+                    DB::table('users_projetos')->insert([
+                        'users_id' => $consulta, 'projetos_id' => $id, 'created_at' => now(), 'updated_at' => now()
+                        ]);
                 }
             }
         } else {
 
-            DB::table('users_projetos')->where('projetos_id', '=', $id)->delete();
+            DB::table('users_projetos')
+                ->where('projetos_id', '=', $id)
+                ->delete();
         }
 
         DB::commit();

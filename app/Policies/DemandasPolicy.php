@@ -39,9 +39,7 @@ class DemandasPolicy
 
         $user = Auth::user();
 
-        return $user->can('Vizualizar Demandas')
-                ? Response::allow('TESTE')
-                : Response::deny('Você não ter permissão para vizualizar demandas');
+        return $user->can('Vizualizar Demandas');
 
     }
 
@@ -63,8 +61,6 @@ class DemandasPolicy
     /**
      * Determine whether the user can update the demandas.
      *
-     * @param \App\User $user
-     * @param \App\Demandas $demandas
      * @return mixed
      */
     public function update()

@@ -52,7 +52,7 @@
                 </table>
                 @can('create', App\Projetos::class)
 
-                    <input type="submit" class="btn btn-default btn-footer" value="Cadastrar"
+                <input type="submit" class="btn btn-default btn-footer" value="Cadastrar"
                            formaction=" {{ route('formProjetos') }} ">
 
                 @endcan

@@ -7,6 +7,7 @@ use App\UsersProjetos;
 use App\User;
 use auth;
 use Illuminate\Auth\Access\HandlesAuthorization;
+use Illuminate\Auth\Access\Response;
 use Illuminate\Support\Facades\DB;
 
 class ProjetosPolicy
@@ -66,7 +67,9 @@ class ProjetosPolicy
     {
         $user = Auth::user();
 
-        return $user->can('Editar Projetos');
+        return $user->can('Editar Projetos')
+            ? Response::allow()
+            : Response::deny('Você não ter permissão para editar Projetos');
 
     }
 
@@ -77,7 +80,7 @@ class ProjetosPolicy
      * @param \App\Projetos $projetos
      * @return mixed
      */
-    public function delete(User $user)
+    public function delete()
     {
         $user = Auth::user();
 

@@ -36,7 +36,7 @@
                                        formaction=" {{ route('destroyDemandas', ['id' => $demandas->id]) }} "
                                        formmethod="POST" value="Deletar">
                                 <input type="submit" class="btn"
-                                       formaction=" {{ route('editaDemandas', ['id' => $demandas->id, 'idProjeto' => $demandas->idProjeto]) }} "
+                                       dusk="editar" formaction=" {{ route('editaDemandas', ['id' => $demandas->id, 'idProjeto' => $demandas->idProjeto]) }} "
                                        formmethod="GET" value="Editar">
 
                             </td>
@@ -51,7 +51,7 @@
                 </table>
                 @can('create', App\Demandas::class)
 
-                    <input type="submit" class="btn" formmethod="GET" formaction=" {{ route('formDemandas') }} "
+                    <input type="submit" dusk="cadastrar" class="btn" formmethod="GET" formaction=" {{ route('formDemandas') }} "
                            value="Cadastrar">
 
             @endcan

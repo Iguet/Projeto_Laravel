@@ -31,7 +31,7 @@
                     @foreach ($users as $user)
                         <tr>
                             @csrf
-                            <td><input type="checkbox" name="id[]" value=" {{ $user->id }} "></td>
+                            <td><input type="checkbox" name="users_id[]" value=" {{ $user->id }} "></td>
                             <td> {{ $user->id }} </td>
                             <td> {{ $user->name }} </td>
                             <td> {{ $user->email }} </td>
