@@ -185,11 +185,7 @@ class DemandasController extends Controller
     public function update(DemandasUpdateRequest $request, Demandas $demandas, $id)
     {
 
-//        dd($this->authorize('update', $demandas));
-
         $this->authorize('update', $demandas);
-
-//        dd($request);
 
         $dados = $demandas->find($id);
         $dados->titulo = $request->titulo;

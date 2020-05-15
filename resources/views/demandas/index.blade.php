@@ -29,7 +29,7 @@
                             <td> {{ $demandas->descricao }} </td>
                             <td> {{ $demandas->estado }} </td>
                             <td> {{ $demandas->created_at }} </td>
-                            @hasanyrole('Admin Demandas|Admin')
+                            @can('update', App\Demandas::class)
                             <td>
 
                                 <input type="submit" class="btn"
@@ -42,9 +42,9 @@
                             </td>
                             @else
                                 <td><input type="submit" class="btn"
-                                           formaction=" {{ route('editaDemandas', ['id' => $demandas->id, 'idProjeto' => $demandas->idProjeto]) }} "
+                                           dusk="vizualizar" formaction=" {{ route('editaDemandas', ['id' => $demandas->id, 'idProjeto' => $demandas->idProjeto]) }} "
                                            formmethod="GET" value="Vizualizar"></td>
-                                @endhasanyrole
+                            @endcan
                         </tr>
                     @endforeach
                     </tbody>

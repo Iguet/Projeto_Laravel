@@ -8,6 +8,7 @@ use App\User;
 use Illuminate\Foundation\Testing\DatabaseMigrations;
 use Laravel\Dusk\Browser;
 use Spatie\Permission\Models\Permission;
+use Tests\Browser\Pages\DemandasIndex;
 use Tests\DuskTestCase;
 use Tests\Feature\FunctionsTest;
 
@@ -21,23 +22,27 @@ class DemandasTest extends DuskTestCase
 
         $data = new FunctionsTest();
 
-        $projeto = $data->createProjeto();
-
-        $demanda = $data->createDemanda();
+        $data->createUser();
 
         $data->adminDemandas();
 
+        $data->createProjeto();
+
+        $data->createUserProjeto();
+
+        $data->createDemanda();
+
         $this->browse(function ($first) {
 
-            $first->loginAs(User::find(2))
-                ->visit('/demandas')
+            $first->loginAs(User::find(1))
+                ->visit(new DemandasIndex())
                 ->click('@cadastrar')
-                ->assertPathIs('/demandas/cadastrar')
-                ->value('@projeto', Projetos::find(1))
-                ->value('@user', User::find(2))
+                ->select('@user', User::find(1)->id)
                 ->value('@titulo', 'teste')
                 ->value('@descricao', 'teste')
-                ->click('@CriarDemanda');
+                ->assertPathIs('/demandas')
+
+            ;
         });
     }
 
@@ -46,20 +51,20 @@ class DemandasTest extends DuskTestCase
 
         $data = new FunctionsTest();
 
-        $projeto = $data->createProjeto();
+        $data->createUser();
 
         $admin = $data->adminDemandas();
 
+        $projeto = $data->createProjeto();
+
         $demanda = $data->createDemanda();
 
+        $this->browse(function ($first) {
 
-        $this->browse(function ($first) use ($admin) {
-
-            $first->loginAs($admin)
-                ->visit('/demandas')
+            $first->loginAs(User::find(1))
+                ->visit(new DemandasIndex())
                 ->click('@editar')
-                ->assertPathIs('/demandas/1/1/editar');
-
+                ->assertPathIs('demandas/1/1/editar');
         });
 
     }

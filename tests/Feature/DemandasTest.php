@@ -27,6 +27,8 @@ class DemandasTest extends TestCase
 
         Projetos::create($this->data()->projeto());
 
+        $this->data()->createUser();
+
     }
 
     public function test_only_logged_users_can_see_demandas()
@@ -50,7 +52,7 @@ class DemandasTest extends TestCase
     public function test_user_dont_have_permission_to_see_demandas()
     {
 
-        $this->actingAs($this->user());
+        $this->actingAs($this->data()->user());
 
         $response = $this->get('/demandas')
             ->assertForbidden();
@@ -69,7 +71,7 @@ class DemandasTest extends TestCase
     public function test_user_dont_have_permission_to_see_the_form_to_create_demandas()
     {
 
-        $response = $this->actingAs($this->user())
+        $response = $this->actingAs($this->data()->user())
             ->get('/demandas/cadastrar')
             ->assertForbidden();
 
@@ -164,15 +166,6 @@ class DemandasTest extends TestCase
             ->assertRedirect();
 
         $this->assertCount(0, Demandas::all());
-
-    }
-
-    private function user()
-    {
-
-        $user = factory(User::class)->create();
-
-        return $user;
 
     }
 

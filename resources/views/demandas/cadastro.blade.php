@@ -87,7 +87,7 @@
                         // console.log(data.name[i]);
 
 
-                        $('#select').append('<option value="' + data.id[i].id + '">' + data.name[i].name + '</option>');
+                        $('#select').append('<option value="'+data.id[i].id+'">'+data.name[i].name+'</option>');
 
                     }
 

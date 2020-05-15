@@ -16,10 +16,20 @@ class FunctionsTest extends TestCase
 
     use RefreshDatabase;
 
+
+    public function createUser()
+    {
+
+        $data = factory(User::class)->create();
+
+        return $data;
+
+    }
+
     public function user()
     {
 
-        $user = factory(User::class)->create();
+        $user = User::find(1);
 
         return $user;
 
@@ -33,7 +43,7 @@ class FunctionsTest extends TestCase
             'titulo' => 'teste',
             'descricao' => 'teste',
             'projeto_id' => $this->projeto()['id'],
-            'user_id' => 1,
+            'user_id' => $this->user()->id,
             'estado' => 'nova'
         ];
 
